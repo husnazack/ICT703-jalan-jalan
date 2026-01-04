@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BottomNavigation } from "@/components/informatics";
 
 const upcomingTrips = [
   {
@@ -166,7 +165,7 @@ export default function PlannerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto pb-24">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="px-6 pt-8 pb-4">
         <div className="flex items-center justify-between mb-2">
@@ -520,7 +519,6 @@ export default function PlannerPage() {
         </DialogContent>
       </Dialog>
 
-      <BottomNavigation />
     </div>
   );
 }

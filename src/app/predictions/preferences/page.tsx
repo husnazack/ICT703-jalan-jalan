@@ -10,6 +10,8 @@ import {
   DialogContent,
 } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
 import {
   Sparkles,
   ChevronLeft,
@@ -221,25 +223,8 @@ export default function PreferencesPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-semibold text-lg text-slate-800">TravelSmart</span>
-          </div>
-          <Button
-            variant="ghost"
-            onClick={() => router.back()}
-            className="text-slate-600"
-          >
-            <ChevronLeft className="w-4 h-4 mr-1" />
-            Back
-          </Button>
-        </div>
-      </header>
+      <Navigation />
+      <GroupLabel group={5} />
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-8">

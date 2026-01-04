@@ -1,9 +1,14 @@
 "use client";
 
+import { use } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronLeft, ChevronRight, PlaneTakeoff, Send } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
+import { ChevronLeft, ChevronRight, PlaneTakeoff, Send, Flag } from "lucide-react";
 
 // Mock data for the story detail
 const storyData = {
@@ -35,46 +40,36 @@ const storyData = {
   ],
 };
 
-export default function StoryDetailPage() {
+export default function StoryDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="flex items-center justify-between px-[90px] py-4 border-b border-gray-100">
-        <span className="text-xl font-semibold">Jalan²</span>
-        <nav className="flex items-center gap-2">
-          <Button variant="ghost" className="text-slate-600 text-sm font-semibold">
-            My Trip
-          </Button>
-          <Button variant="ghost" className="text-slate-600 text-sm font-semibold">
-            AI
-          </Button>
-          <Button variant="ghost" className="text-slate-600 text-sm font-semibold">
-            Contact Us
-          </Button>
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-sm font-semibold text-slate-600">
-            CN
-          </div>
-        </nav>
-      </header>
+      <Navigation />
+      <GroupLabel group={4} />
 
       {/* Main Content */}
-      <main className="px-[56px] py-8">
+      <main className="px-4 sm:px-6 md:px-12 lg:px-14 xl:px-[56px] py-8">
         {/* Page Title */}
-        <div className="flex items-end justify-between mb-6">
-          <h1 className="text-[30px] font-semibold tracking-tight text-slate-700">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+          <h1 className="text-xl md:text-2xl lg:text-[30px] font-semibold tracking-tight text-slate-700">
             Community Stories
           </h1>
           <Link href="/community/stories/create">
-            <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-slate-50 text-sm font-semibold">
+            <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-slate-50 text-sm font-semibold w-full sm:w-auto">
               Create Community Story
             </Button>
           </Link>
         </div>
 
         {/* Two Column Layout */}
-        <div className="flex gap-8">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-6 lg:gap-8">
           {/* Left Column - Image & Story Info */}
-          <div className="w-[675px]">
+          <div className="w-full lg:w-1/2 xl:w-[675px]">
             {/* Location Header */}
             <div className="p-6">
               <h2 className="text-base font-semibold text-slate-700">
@@ -84,7 +79,7 @@ export default function StoryDetailPage() {
             </div>
 
             {/* Main Image Placeholder */}
-            <div className="w-full h-[450px] bg-gradient-to-br from-purple-900 to-purple-600 rounded-lg" />
+            <div className="w-full h-48 md:h-64 lg:h-80 xl:h-[450px] bg-gradient-to-br from-purple-900 to-purple-600 rounded-lg" />
 
             {/* Image Carousel */}
             <div className="flex items-center gap-4 mt-6">
@@ -96,11 +91,11 @@ export default function StoryDetailPage() {
                 <ChevronLeft className="h-4 w-4 text-slate-700" />
               </Button>
 
-              <div className="flex-1 flex gap-4">
+              <div className="flex-1 flex gap-2 md:gap-4">
                 {storyData.images.map((image) => (
                   <div
                     key={image.id}
-                    className="flex-1 h-[245px] bg-gradient-to-br from-sky-200 to-sky-400 rounded-lg border border-white shadow-sm"
+                    className="flex-1 h-24 md:h-32 lg:h-48 bg-gradient-to-br from-sky-200 to-sky-400 rounded-lg border border-white shadow-sm"
                   />
                 ))}
               </div>
@@ -120,21 +115,29 @@ export default function StoryDetailPage() {
             {/* Author Info */}
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-purple-900 flex items-center justify-center">
-                    <span className="text-[10px] font-semibold text-white">
-                      {storyData.author.avatar}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="w-6 h-6">
+                      <AvatarFallback className="bg-purple-900 text-white text-[10px] font-semibold">
+                        {storyData.author.avatar}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-base font-semibold text-slate-700">
+                      {storyData.author.name}
                     </span>
+                    <div className="relative ml-2">
+                      <PlaneTakeoff className="w-6 h-6 text-purple-900 drop-shadow-md" />
+                    </div>
+                    <Badge variant="outline" className="ml-2 rounded-lg border-purple-900">
+                      {storyData.author.badge}
+                    </Badge>
                   </div>
-                  <span className="text-base font-semibold text-slate-700">
-                    {storyData.author.name}
-                  </span>
-                  <div className="relative ml-2">
-                    <PlaneTakeoff className="w-6 h-6 text-purple-900 drop-shadow-md" />
-                  </div>
-                  <span className="ml-2 px-2 py-[3px] text-xs font-semibold text-slate-700 border border-purple-900 rounded-lg bg-slate-50">
-                    {storyData.author.badge}
-                  </span>
+                  <Link href={`/community/stories/${id}/report`}>
+                    <Button variant="outline" size="sm" className="text-red-600 border-red-300 hover:bg-red-50">
+                      <Flag className="w-4 h-4 mr-1" />
+                      Report
+                    </Button>
+                  </Link>
                 </div>
               </div>
 
@@ -148,9 +151,12 @@ export default function StoryDetailPage() {
             </div>
 
             {/* Comment Input */}
-            <div className="flex items-center gap-0 bg-slate-700 rounded-[10px] overflow-hidden">
-              <div className="flex-1" />
-              <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-slate-50 text-sm font-semibold m-3">
+            <div className="flex items-center gap-0 bg-slate-700 rounded-[10px] overflow-hidden h-[60px]">
+              <Input
+                placeholder="Add a comment..."
+                className="flex-1 h-auto bg-white border-0 text-slate-700 placeholder:text-slate-400 focus-visible:ring-0 focus-visible:ring-offset-0 px-4 py-2 m-3 rounded-lg"
+              />
+              <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-white text-sm font-semibold m-3 h-auto">
                 <Send className="w-4 h-4 mr-2" />
                 Send
               </Button>
@@ -165,17 +171,17 @@ export default function StoryDetailPage() {
               {storyData.experiences.map((experience) => (
                 <div key={experience.id} className="flex flex-col gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-full bg-purple-900 flex items-center justify-center">
-                      <span className="text-[10px] font-semibold text-white">
+                    <Avatar className="w-6 h-6">
+                      <AvatarFallback className="bg-purple-900 text-white text-[10px] font-semibold">
                         {experience.author.avatar}
-                      </span>
-                    </div>
+                      </AvatarFallback>
+                    </Avatar>
                     <span className="text-base font-semibold text-slate-700">
                       {experience.author.name}
                     </span>
-                    <span className="px-2 py-[3px] text-xs font-semibold text-slate-700 border border-purple-900 rounded-lg bg-slate-50">
+                    <Badge variant="outline" className="rounded-lg border-purple-900">
                       {experience.author.badge}
-                    </span>
+                    </Badge>
                   </div>
                   <p className="text-sm text-slate-500 leading-relaxed">
                     {experience.content}
@@ -185,7 +191,7 @@ export default function StoryDetailPage() {
             </div>
 
             {/* Add Comment */}
-            <div className="flex gap-12">
+            <div className="flex gap-4 md:gap-8 lg:gap-12">
               <Input
                 placeholder="Add Comment"
                 className="border-purple-900 shadow-sm"

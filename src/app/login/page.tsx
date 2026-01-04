@@ -1,72 +1,104 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
 
 export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <header className="px-12 py-6">
-        <Link href="/" className="text-[23px] font-semibold text-black">
-          Jalan²
-        </Link>
-      </header>
+      <Navigation />
+      <GroupLabel group={4} />
 
       {/* Main Content - Two Column Layout */}
-      <main className="flex-1 flex">
+      <main className="flex-1 w-full grid grid-cols-1 lg:grid-cols-2 gap-0">
         {/* Left Column - Login Form */}
-        <div className="w-[692px] flex items-center justify-center">
-          <div className="w-[588px] border-4 border-[#3B0764] rounded-[20px] p-16">
-            <div className="flex flex-col items-center gap-4">
+        <div className="flex items-center justify-center p-4 lg:p-8">
+          <div className="w-full max-w-[588px] border-4 border-[#3B0764] rounded-[20px] relative">
+            {/* Form Container */}
+            <div className="px-8 md:px-12 lg:px-16 pt-8 pb-8 flex flex-col items-center gap-3 w-full">
               {/* Title */}
-              <h1 className="text-[30px] font-semibold text-black text-center tracking-tight leading-none">
+              <h1 
+                className="w-full max-w-[386px] text-[30px] font-semibold text-black text-center leading-[1em] tracking-[-0.03333em]"
+                style={{ fontFamily: "Inter" }}
+              >
                 Welcome to Jalan²
               </h1>
 
               {/* Email Field */}
-              <div className="w-[355px] flex flex-col gap-1">
-                <label className="text-base font-semibold text-slate-700">
+              <div className="w-full max-w-[355px] flex flex-col gap-1.5">
+                <label 
+                  className="text-base font-semibold text-[#334155]"
+                  style={{ fontFamily: "Inter", lineHeight: "1.5em" }}
+                >
                   Email
                 </label>
                 <Input
                   type="email"
                   placeholder="Email"
-                  className="border-[#3B0764] shadow-sm"
+                  className="w-full border border-[#3B0764] shadow-sm rounded-lg px-3 py-[7.5px] text-sm text-[#737373]"
+                  style={{ fontFamily: "Inter", lineHeight: "1.5em", letterSpacing: "0.5%" }}
                 />
               </div>
 
               {/* Password Field */}
-              <div className="w-[355px] flex flex-col gap-1">
-                <label className="text-base font-semibold text-slate-700">
-                  Password
-                </label>
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  className="border-[#3B0764] shadow-sm"
-                />
+              <div className="w-full max-w-[355px] flex flex-col gap-1.5">
+                <div className="w-full flex flex-col gap-1.5">
+                  <label 
+                    className="text-base font-semibold text-[#334155]"
+                    style={{ fontFamily: "Inter", lineHeight: "1.5em" }}
+                  >
+                    Password
+                  </label>
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    className="w-full border border-[#3B0764] shadow-sm rounded-lg px-3 py-[7.5px] text-sm text-[#737373]"
+                    style={{ fontFamily: "Inter", lineHeight: "1.5em", letterSpacing: "0.5%" }}
+                  />
+                </div>
                 <Link
                   href="/forgot-password"
-                  className="text-base font-bold text-[#005AAB] self-end mt-1"
-                  style={{ fontFamily: "Manrope" }}
+                  className="text-base font-bold text-[#005AAB] self-end"
+                  style={{ 
+                    fontFamily: "Manrope", 
+                    lineHeight: "1.7em", 
+                    letterSpacing: "-0.01em" 
+                  }}
                 >
                   Forget Password?
                 </Link>
               </div>
 
               {/* Login Button */}
-              <Button className="w-[354px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-slate-50 text-sm font-semibold">
+              <Button 
+                className="w-full max-w-[354px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-[#F8FAFC] text-sm font-semibold rounded-lg px-4 py-[7.5px]"
+                style={{ 
+                  fontFamily: "Inter", 
+                  lineHeight: "1.5em", 
+                  letterSpacing: "0.5%",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
                 Login
               </Button>
 
               {/* Register Link */}
-              <Link href="/register" className="w-[355px]">
+              <Link href="/register" className="w-full max-w-[355px]">
                 <Input
                   type="button"
                   value="Register"
-                  className="w-full border-[#3B0764] shadow-sm text-center text-slate-500 cursor-pointer hover:bg-slate-50"
+                  className="w-full border border-[#3B0764] shadow-sm rounded-lg px-3 py-[7.5px] text-center text-sm text-[#737373] cursor-pointer hover:bg-slate-50"
+                  style={{ 
+                    fontFamily: "Inter", 
+                    lineHeight: "1.5em", 
+                    letterSpacing: "0.5%",
+                    justifyContent: "center"
+                  }}
                 />
               </Link>
             </div>
@@ -74,19 +106,14 @@ export default function LoginPage() {
         </div>
 
         {/* Right Column - Illustration */}
-        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-purple-100 to-purple-50">
-          {/* Placeholder for illustration */}
-          <div className="w-[723px] h-[680px] flex items-center justify-center">
-            <div className="text-slate-400 text-center">
-              <svg
-                className="w-64 h-64 mx-auto mb-4 text-purple-300"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-              </svg>
-              <p className="text-lg font-medium text-purple-400">Travel Illustration</p>
-            </div>
+        <div className="hidden lg:flex items-center justify-center bg-white p-4 lg:p-8">
+          <div className="w-full max-w-[723px] aspect-[723/680] relative">
+            <Image
+              src="/login-illustration.png"
+              alt="Travel Illustration"
+              fill
+              className="object-contain"
+            />
           </div>
         </div>
       </main>

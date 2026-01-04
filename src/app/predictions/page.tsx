@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Sparkles, 
-  MapPin, 
-  Calendar, 
-  Users, 
-  Minus, 
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
+import {
+  Sparkles,
+  MapPin,
+  Calendar,
+  Users,
+  Minus,
   Plus,
   ArrowRight
 } from "lucide-react";
@@ -35,15 +37,8 @@ export default function PredictionsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center">
-            <Sparkles className="w-4 h-4 text-white" />
-          </div>
-          <span className="font-semibold text-lg text-slate-800">TravelSmart</span>
-        </div>
-      </header>
+      <Navigation />
+      <GroupLabel group={5} />
 
       {/* Main Content */}
       <main className="max-w-2xl mx-auto px-6 py-12">

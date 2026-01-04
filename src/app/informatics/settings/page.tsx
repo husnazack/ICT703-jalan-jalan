@@ -6,7 +6,6 @@ import { RotateCcw, User, Bell, Shield, HelpCircle, ChevronRight, LogOut } from 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { BottomNavigation } from "@/components/informatics";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -59,7 +58,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto pb-24">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="px-6 pt-8 pb-4">
         <div className="mb-2">
@@ -90,11 +89,13 @@ export default function SettingsPage() {
           <h2 className="font-semibold text-foreground mb-3">{section.title}</h2>
           <Card className="overflow-hidden">
             {section.items.map((item, index) => {
+              const hasAction = "action" in item;
               const handleClick = () => {
-                if (item.action === "profile") router.push("/informatics/settings/profile");
-                else if (item.action === "privacy") router.push("/informatics/settings/privacy");
+                if (hasAction && item.action === "profile") router.push("/informatics/settings/profile");
+                else if (hasAction && item.action === "privacy") router.push("/informatics/settings/privacy");
               };
 
+              const hasToggle = "toggle" in item && item.toggle;
               const content = (
                 <>
                   <div className="flex items-center gap-3">
@@ -103,7 +104,7 @@ export default function SettingsPage() {
                     </div>
                     <span className="text-foreground text-sm">{item.label}</span>
                   </div>
-                  {item.toggle ? (
+                  {hasToggle && "value" in item && "onChange" in item ? (
                     <Switch checked={item.value} onCheckedChange={item.onChange} />
                   ) : (
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
@@ -111,7 +112,7 @@ export default function SettingsPage() {
                 </>
               );
 
-              return item.action ? (
+              return hasAction ? (
                 <button
                   key={item.label}
                   onClick={handleClick}
@@ -176,7 +177,6 @@ export default function SettingsPage() {
         <p className="text-muted-foreground text-xs">Travel Pulse v1.0.0</p>
       </div>
 
-      <BottomNavigation />
     </div>
   );
 }

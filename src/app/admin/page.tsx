@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { AlertCircle } from "lucide-react";
+import { GroupLabel } from "@/components/shared/group-label";
 
 // Mock report data
 const reports = [
@@ -53,6 +54,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#F0F0F0]">
+      <GroupLabel group={4} />
       {/* Top Header Bar */}
       <header className="fixed top-0 left-0 right-0 h-[100px] bg-white border-b border-[#D9D9D9] z-10">
         <div className="flex items-center justify-between h-full px-6">
@@ -79,10 +81,10 @@ export default function AdminDashboardPage() {
           <div className="flex flex-col items-center gap-2 w-full">
             <Link
               href="/admin"
-              className="w-full flex items-center gap-3 px-8 py-4 bg-[#EBDBFF] border-l-[5px] border-[#3B0764]"
+              className="w-full flex items-center gap-3 px-8 py-4 bg-emerald-50 border-l-[5px] border-emerald-700"
             >
-              <AlertCircle className="w-6 h-6 text-[#3B0764]" />
-              <span className="text-base font-bold text-[#3B0764]">Report</span>
+              <AlertCircle className="w-6 h-6 text-emerald-700" />
+              <span className="text-base font-bold text-emerald-700">Report</span>
             </Link>
           </div>
         </div>
@@ -192,7 +194,7 @@ export default function AdminDashboardPage() {
                         <td className="px-4 py-4">
                           <Link
                             href={`/admin/reports/${report.id}`}
-                            className="inline-flex items-center px-4 py-1 rounded-md text-[10px] font-bold bg-[#3B0764] text-white"
+                            className="inline-flex items-center px-4 py-1 rounded-md text-[10px] font-bold bg-emerald-700 text-white"
                           >
                             View More
                           </Link>
@@ -208,10 +210,10 @@ export default function AdminDashboardPage() {
 
               {/* Pagination */}
               <div className="flex justify-end items-center gap-2 mt-4">
-                <button className="w-8 h-8 flex items-center justify-center rounded-md bg-[#3B0764] text-white text-xs font-semibold">
+                <button className="w-8 h-8 flex items-center justify-center rounded-md bg-emerald-700 text-white text-xs font-semibold">
                   1
                 </button>
-                <button className="px-4 h-8 flex items-center justify-center rounded-md bg-white border border-[#D9D9D9] text-[#3B0764] text-xs font-semibold">
+                <button className="px-4 h-8 flex items-center justify-center rounded-md bg-white border border-[#D9D9D9] text-emerald-700 text-xs font-semibold">
                   Next
                 </button>
               </div>

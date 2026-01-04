@@ -1,4 +1,3 @@
-export { BottomNavigation } from "./bottom-navigation";
 export { DonutChart } from "./donut-chart";
 export { MetricCard } from "./metric-card";
 export { WatchlistCard } from "./watchlist-card";

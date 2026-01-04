@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Calendar, TrendingDown, TrendingUp, Lightbulb, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BottomNavigation, DonutChart, MetricCard, WatchlistCard } from "@/components/informatics";
+import { DonutChart, MetricCard, WatchlistCard } from "@/components/informatics";
 
 const insights = [
   {
@@ -85,7 +85,7 @@ export default function DashboardPage() {
   }, [isPaused]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto pb-24">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="px-6 pt-8 pb-4">
         <p className="text-muted-foreground text-sm">Welcome back, Traveler</p>
@@ -237,7 +237,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <BottomNavigation />
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { AlertCircle, ChevronLeft, ChevronRight, PlaneTakeoff, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GroupLabel } from "@/components/shared/group-label";
 import { useState } from "react";
 import {
   Select,
@@ -44,6 +45,7 @@ export default function AdminReportDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#F0F0F0]">
+      <GroupLabel group={4} />
       {/* Left Sidebar */}
       <aside className="fixed left-0 top-0 bottom-0 w-[260px] bg-white border-r border-[#D9D9D9]">
         {/* Logo */}
@@ -60,10 +62,10 @@ export default function AdminReportDetailPage() {
           <div className="flex flex-col items-center gap-2 w-full">
             <Link
               href="/admin"
-              className="w-full flex items-center gap-3 px-8 py-4 bg-[#EBDBFF] border-l-[5px] border-[#3B0764]"
+              className="w-full flex items-center gap-3 px-8 py-4 bg-emerald-50 border-l-[5px] border-emerald-700"
             >
-              <AlertCircle className="w-6 h-6 text-[#3B0764]" />
-              <span className="text-base font-bold text-[#3B0764]">Report</span>
+              <AlertCircle className="w-6 h-6 text-emerald-700" />
+              <span className="text-base font-bold text-emerald-700">Report</span>
             </Link>
           </div>
         </div>
@@ -90,7 +92,7 @@ export default function AdminReportDetailPage() {
             </div>
 
             {/* Main Image */}
-            <div className="w-[675px] h-[450px] bg-gradient-to-br from-purple-900 to-purple-600 rounded-lg mx-auto" />
+            <div className="w-[675px] h-[450px] bg-gradient-to-br from-emerald-700 to-emerald-500 rounded-lg mx-auto" />
 
             {/* Image Carousel */}
             <div className="flex items-center gap-4 mt-6 px-6 max-w-[720px] mx-auto">
@@ -125,7 +127,7 @@ export default function AdminReportDetailPage() {
           <div className="max-w-[600px] mx-auto mb-8">
             {/* Author Info */}
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-6 h-6 rounded-full bg-purple-900 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full bg-emerald-700 flex items-center justify-center">
                 <span className="text-[10px] font-semibold text-white">
                   {reportData.story.author.avatar}
                 </span>
@@ -133,8 +135,8 @@ export default function AdminReportDetailPage() {
               <span className="text-base font-semibold text-slate-700">
                 {reportData.story.author.name}
               </span>
-              <PlaneTakeoff className="w-6 h-6 text-purple-900" />
-              <span className="px-2 py-[3px] text-xs font-semibold text-slate-700 border border-purple-900 rounded-lg bg-slate-50">
+              <PlaneTakeoff className="w-6 h-6 text-emerald-700" />
+              <span className="px-2 py-[3px] text-xs font-semibold text-slate-700 border border-emerald-700 rounded-lg bg-slate-50">
                 {reportData.story.author.badge}
               </span>
             </div>
@@ -193,7 +195,7 @@ export default function AdminReportDetailPage() {
             <div className="flex items-center gap-4">
               <Button
                 variant="outline"
-                className="w-[420px] h-[51px] border-[#3B0764] text-[#3B0764] text-sm font-semibold"
+                className="w-[420px] h-[51px] border-emerald-700 text-emerald-700 text-sm font-semibold"
               >
                 Reject Report
               </Button>
@@ -233,7 +235,7 @@ export default function AdminReportDetailPage() {
                 Reasons
               </label>
               <Select defaultValue="misleading">
-                <SelectTrigger className="w-full border-[#3B0764] shadow-sm">
+                <SelectTrigger className="w-full border-emerald-700 shadow-sm">
                   <SelectValue placeholder="Select a reason" />
                 </SelectTrigger>
                 <SelectContent>
@@ -254,7 +256,7 @@ export default function AdminReportDetailPage() {
               <Input
                 type="button"
                 value="Back"
-                className="w-[243px] border-[#3B0764] shadow-sm text-center text-slate-500 cursor-pointer hover:bg-slate-50"
+                className="w-[243px] border-emerald-700 shadow-sm text-center text-slate-500 cursor-pointer hover:bg-slate-50"
                 onClick={() => setShowDeleteModal(false)}
               />
               <Button className="w-[243px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-slate-50 text-sm font-semibold">

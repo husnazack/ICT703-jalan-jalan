@@ -1,16 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { DashboardHeader } from "@/components/dashboard";
 import { BudgetDonutChart } from "@/components/dashboard/cards/budget-donut-chart";
 import { SpendingBreakdownCard } from "@/components/dashboard/cards/spending-breakdown-card";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
 
 export default function BudgetPage() {
   return (
     <div className="min-h-screen bg-[#F1F5F9]">
-      <DashboardHeader />
+      <Navigation />
+      <GroupLabel group={2} />
 
       <main className="container mx-auto px-6 lg:px-24 py-8">
         {/* Page Title */}

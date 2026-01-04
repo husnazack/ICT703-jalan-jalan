@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
-  Search, 
-  Calendar, 
-  Users, 
-  ChevronDown, 
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
+import {
+  Search,
+  Calendar,
+  Users,
+  ChevronDown,
 } from "lucide-react";
 
 export default function WanderboardLandingPage() {
@@ -25,49 +26,11 @@ export default function WanderboardLandingPage() {
 
   return (
     <div className="min-h-screen bg-[#F1F5F9]">
-      {/* Header */}
-      <header className="bg-white">
-        <div className="container mx-auto px-6 lg:px-24 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link href="/wanderboard">
-              <span className="font-semibold text-xl tracking-wide text-[#3B0764]">
-                Wanderboard
-              </span>
-            </Link>
-
-            {/* Navigation */}
-            <nav className="flex items-center">
-              <Link href="/dashboard">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="rounded-lg text-[#3B0764] bg-[#F3E8FF] font-semibold text-sm"
-                >
-                  Live Itinerary
-                </Button>
-              </Link>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                className="rounded-lg text-[#334155] font-semibold text-sm flex items-center gap-1"
-              >
-                Booking Details
-                <ChevronDown className="size-4" />
-              </Button>
-            </nav>
-
-            {/* User Avatar */}
-            <div className="size-10 rounded-full bg-[#F1F5F9] flex items-center justify-center">
-              <span className="text-sm font-semibold text-[#334155]">AF</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navigation />
+      <GroupLabel group={2} />
 
       {/* Main Content */}
-      <main className="container mx-auto px-6 lg:px-24 pt-32 md:pt-48 lg:pt-64">
+      <main className="container mx-auto px-6 lg:px-24 pt-24 md:pt-32 lg:pt-48">
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl font-semibold text-[#334155] leading-tight tracking-tight mb-8 md:mb-12">
           Get live data from<br />

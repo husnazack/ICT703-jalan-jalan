@@ -19,7 +19,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col px-6 py-8 max-w-md mx-auto">
+    <div className="min-h-screen bg-background flex flex-col px-6 py-8">
       {/* Header */}
       <div className="text-center mb-10">
         <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">

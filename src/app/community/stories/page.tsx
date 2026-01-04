@@ -3,35 +3,22 @@
 import { MapPin } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
 import Link from "next/link";
 
-// Badge component for consistent styling
-function Badge({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center justify-center gap-1.5 px-2 py-0.5 text-xs font-semibold rounded-lg border border-purple-950 bg-slate-50 text-slate-600">
-      {children}
-    </span>
-  );
-}
-
-// Avatar component
-function Avatar({ initials }: { initials: string }) {
-  return (
-    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
-      <span className="text-sm font-semibold text-slate-600">{initials}</span>
-    </div>
-  );
-}
-
 // Story Card component
-function StoryCard({ 
-  location, 
+function StoryCard({
+  id,
+  location,
   place,
   author,
   authorBadge,
   tags,
   bgColor
-}: { 
+}: {
+  id: number;
   location: string;
   place: string;
   author: string;
@@ -40,34 +27,37 @@ function StoryCard({
   bgColor: string;
 }) {
   return (
-    <Card className="w-[398px] border border-purple-950 shadow-sm rounded-lg overflow-hidden">
-      <div className="p-6 space-y-1">
-        <div className="flex items-center gap-1">
-          <MapPin className="w-6 h-6" />
-          <span className="font-semibold text-slate-700">{location}</span>
+    <Link href={`/community/stories/${id}`}>
+      <Card className="w-full border border-purple-950 shadow-sm rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div className="p-6 space-y-1">
+          <div className="flex items-center gap-1">
+            <MapPin className="w-6 h-6" />
+            <span className="font-semibold text-slate-700">{location}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-slate-500">{author}</span>
+            {authorBadge && <Badge variant="outline" className="rounded-lg border-purple-950">{authorBadge}</Badge>}
+          </div>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-500">{author}</span>
-          {authorBadge && <Badge>{authorBadge}</Badge>}
+        <div className={`h-64 md:h-80 lg:h-96 ${bgColor} relative`}>
+          <div className="absolute bottom-0 left-0 right-0 p-6">
+            <span className="text-sm font-semibold text-white">{place}</span>
+          </div>
         </div>
-      </div>
-      <div className={`h-[398px] ${bgColor} relative`}>
-        <div className="absolute bottom-0 left-0 right-0 p-6">
-          <span className="text-sm font-semibold text-white">{place}</span>
+        <div className="p-4 flex flex-wrap gap-2">
+          {tags.map((tag, i) => (
+            <Badge key={i} variant="outline" className="rounded-lg border-purple-950">{tag}</Badge>
+          ))}
         </div>
-      </div>
-      <div className="p-4 flex flex-wrap gap-2">
-        {tags.map((tag, i) => (
-          <Badge key={i}>{tag}</Badge>
-        ))}
-      </div>
-    </Card>
+      </Card>
+    </Link>
   );
 }
 
 export default function CommunityStoriesPage() {
   const stories = [
     {
+      id: 1,
       location: "Kuala Lumpur, Malaysia",
       place: "Kuala Lumpur City Centre",
       author: "Imran Rosli",
@@ -76,6 +66,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-blue-400 to-purple-500"
     },
     {
+      id: 2,
       location: "Langkawi Island, Malaysia",
       place: "Langkawi Island Bridge",
       author: "Farah Shazwanie",
@@ -84,6 +75,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-cyan-400 to-blue-500"
     },
     {
+      id: 3,
       location: "Macau, Hong Kong",
       place: "Lisboeta, Macau",
       author: "Saranya Mohabatten",
@@ -92,6 +84,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-orange-400 to-red-500"
     },
     {
+      id: 4,
       location: "Kuala Lumpur, Malaysia",
       place: "Kuala Lumpur City Centre",
       author: "Imran Rosli",
@@ -100,6 +93,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-blue-400 to-purple-500"
     },
     {
+      id: 5,
       location: "Langkawi Island, Malaysia",
       place: "Langkawi Island Bridge",
       author: "Farah Shazwanie",
@@ -108,6 +102,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-cyan-400 to-blue-500"
     },
     {
+      id: 6,
       location: "Macau, Hong Kong",
       place: "Lisboeta, Macau",
       author: "Saranya Mohabatten",
@@ -116,6 +111,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-orange-400 to-red-500"
     },
     {
+      id: 7,
       location: "Kuala Lumpur, Malaysia",
       place: "Kuala Lumpur City Centre",
       author: "Imran Rosli",
@@ -124,6 +120,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-blue-400 to-purple-500"
     },
     {
+      id: 8,
       location: "Langkawi Island, Malaysia",
       place: "Langkawi Island Bridge",
       author: "Farah Shazwanie",
@@ -132,6 +129,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-cyan-400 to-blue-500"
     },
     {
+      id: 9,
       location: "Macau, Hong Kong",
       place: "Lisboeta, Macau",
       author: "Saranya Mohabatten",
@@ -140,6 +138,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-orange-400 to-red-500"
     },
     {
+      id: 10,
       location: "Kuala Lumpur, Malaysia",
       place: "Kuala Lumpur City Centre",
       author: "Imran Rosli",
@@ -148,6 +147,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-blue-400 to-purple-500"
     },
     {
+      id: 11,
       location: "Langkawi Island, Malaysia",
       place: "Langkawi Island Bridge",
       author: "Farah Shazwanie",
@@ -156,6 +156,7 @@ export default function CommunityStoriesPage() {
       bgColor: "bg-gradient-to-br from-cyan-400 to-blue-500"
     },
     {
+      id: 12,
       location: "Macau, Hong Kong",
       place: "Lisboeta, Macau",
       author: "Saranya Mohabatten",
@@ -167,35 +168,17 @@ export default function CommunityStoriesPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="px-[90px] py-4 flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <Link href="/" className="text-2xl font-semibold text-black">
-            Jalan²
-          </Link>
-          <nav className="flex items-center">
-            <Button variant="ghost" className="text-sm font-semibold text-slate-600">
-              My Trip
-            </Button>
-            <Button variant="ghost" className="text-sm font-semibold text-slate-600">
-              AI
-            </Button>
-            <Button variant="ghost" className="text-sm font-semibold text-slate-600">
-              Contact Us
-            </Button>
-          </nav>
-        </div>
-        <Avatar initials="CN" />
-      </header>
+      <Navigation />
+      <GroupLabel group={4} />
 
       {/* Title Section */}
-      <section className="px-[90px] py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-semibold text-slate-700" style={{ letterSpacing: "-0.03em" }}>
+      <section className="px-4 sm:px-6 md:px-12 lg:px-16 xl:px-[90px] py-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold text-slate-700" style={{ letterSpacing: "-0.03em" }}>
             Community Story
           </h1>
-          <Link href="/community/create">
-            <Button className="bg-blue-900 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg">
+          <Link href="/community/stories/create">
+            <Button className="bg-blue-900 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg w-full sm:w-auto">
               Create Community Story
             </Button>
           </Link>
@@ -203,10 +186,10 @@ export default function CommunityStoriesPage() {
       </section>
 
       {/* Stories Grid */}
-      <section className="px-[90px] pb-8">
-        <div className="grid grid-cols-3 gap-[50px]">
-          {stories.map((story, i) => (
-            <StoryCard key={i} {...story} />
+      <section className="px-4 sm:px-6 md:px-12 lg:px-16 xl:px-[90px] pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+          {stories.map((story) => (
+            <StoryCard key={story.id} {...story} />
           ))}
         </div>
       </section>

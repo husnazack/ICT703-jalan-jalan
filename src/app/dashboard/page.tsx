@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  DashboardHeader,
   AttractionCard,
   PriceComparisonCard,
   SafetyCard,
@@ -15,6 +14,8 @@ import {
 } from "@/components/dashboard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
 import { Search, Users, Calendar, ChevronDown } from "lucide-react";
 
 export default function DashboardPage() {
@@ -25,7 +26,8 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#F1F5F9]">
-      <DashboardHeader />
+      <Navigation />
+      <GroupLabel group={2} />
 
       <main className="container mx-auto px-6 lg:px-24 py-8">
         {/* Search Bar + CTA Card Row */}

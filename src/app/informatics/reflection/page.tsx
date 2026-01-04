@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Check, BookOpen, Calendar } from "lucide-react";
-import { BottomNavigation } from "@/components/informatics";
 
 interface Trip {
   id: number;
@@ -106,7 +105,7 @@ export default function ReflectionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background max-w-md mx-auto pb-24">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="px-6 pt-8 pb-4">
         <div className="flex items-center gap-3 mb-4">
@@ -272,7 +271,6 @@ export default function ReflectionPage() {
         </Button>
       </div>
 
-      <BottomNavigation />
     </div>
   );
 }

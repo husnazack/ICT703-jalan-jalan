@@ -5,56 +5,54 @@ import { Navigation } from "@/components/shared/navigation";
 import { Footer } from "@/components/shared/footer";
 import {
   Map,
-  Search,
-  Calendar,
   Users,
   BarChart3,
   MessageCircle,
   Sparkles,
   Globe,
-  Clock,
   Compass,
   ArrowRight,
   CheckCircle2,
+  Search,
 } from "lucide-react";
 
 const features = [
   {
-    title: "Context-Aware Planning",
-    description: "AI assistant that helps you plan smarter by considering local events, traffic, and cultural holidays.",
-    icon: Sparkles,
+    title: "AI Planning Assistant",
+    description: "Chat with our AI to plan smarter trips with context-aware recommendations for local events, traffic, and cultural holidays.",
+    icon: MessageCircle,
     group: "Group 1",
     href: "/chat",
     color: "from-emerald-500 to-teal-600",
   },
   {
-    title: "Interactive Dashboard",
-    description: "Integrating timelines, maps, and availability data for informed travel decisions.",
+    title: "Live Travel Dashboard",
+    description: "Real-time dashboard with weather, crowd levels, trending spots, and booking status for your destination.",
     icon: Map,
     group: "Group 2",
-    href: "/dashboard/itinerary",
+    href: "/dashboard",
     color: "from-blue-500 to-indigo-600",
   },
   {
-    title: "Personal Informatics",
-    description: "Track your travel goals, budgets, and reflect on past trips with personalized insights.",
+    title: "Personal Travel Hub",
+    description: "Track your travel goals, budgets, expenses and reflect on past trips with personalized insights.",
     icon: BarChart3,
     group: "Group 3",
-    href: "/insights",
+    href: "/informatics/dashboard",
     color: "from-violet-500 to-purple-600",
   },
   {
-    title: "Community Knowledge",
-    description: "Access local tips, community forums, and authentic experiences from verified travelers.",
+    title: "Community & Stories",
+    description: "Discover local tips, community stories, and authentic experiences from verified travelers.",
     icon: Users,
     group: "Group 4",
     href: "/community",
     color: "from-orange-500 to-amber-600",
   },
   {
-    title: "Predictive Analytics",
-    description: "Get insights on crowding, availability, and optimal travel windows for better planning.",
-    icon: Clock,
+    title: "Smart Trip Planner",
+    description: "AI-powered trip planner with crowd predictions, weather alerts, and budget optimization.",
+    icon: Sparkles,
     group: "Group 5",
     href: "/predictions",
     color: "from-rose-500 to-pink-600",
@@ -120,19 +118,19 @@ export default function Home() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-                <Link href="/search">
-                  <Button 
-                    size="lg" 
+                <Link href="/predictions">
+                  <Button
+                    size="lg"
                     className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0 shadow-lg shadow-emerald-500/25"
                   >
-                    <Search className="size-5 mr-2" />
-                    Start Searching
+                    <Sparkles className="size-5 mr-2" />
+                    Start Planning
                   </Button>
                 </Link>
-                <Link href="/dashboard/itinerary">
+                <Link href="/chat">
                   <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                    <Calendar className="size-5 mr-2" />
-                    Plan a Trip
+                    <MessageCircle className="size-5 mr-2" />
+                    Talk to AI
                   </Button>
                 </Link>
               </div>
@@ -246,7 +244,7 @@ export default function Home() {
               </ul>
 
               <div className="mt-8">
-                <Link href="/search">
+                <Link href="/predictions">
                   <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0">
                     Get Started
                     <ArrowRight className="size-4 ml-2" />
@@ -297,9 +295,9 @@ export default function Home() {
               well-planned holiday experiences.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/search">
-                <Button 
-                  size="lg" 
+              <Link href="/predictions">
+                <Button
+                  size="lg"
                   className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-emerald-50"
                 >
                   Start Planning Now
@@ -307,9 +305,9 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="/chat">
-                <Button 
-                  size="lg" 
-                  variant="outline" 
+                <Button
+                  size="lg"
+                  variant="outline"
                   className="w-full sm:w-auto border-white text-white hover:bg-white/10"
                 >
                   Talk to AI Assistant

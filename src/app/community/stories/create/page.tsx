@@ -4,6 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
 import { Camera, Image, Plus, Search, X } from "lucide-react";
 
 export default function CreateStoryPage() {
@@ -28,35 +30,19 @@ export default function CreateStoryPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="flex items-center justify-between px-[90px] py-4 border-b border-gray-100">
-        <span className="text-xl font-semibold">Jalan²</span>
-        <nav className="flex items-center gap-2">
-          <Button variant="ghost" className="text-slate-600 text-sm font-semibold">
-            My Trip
-          </Button>
-          <Button variant="ghost" className="text-slate-600 text-sm font-semibold">
-            AI
-          </Button>
-          <Button variant="ghost" className="text-slate-600 text-sm font-semibold">
-            Contact Us
-          </Button>
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-sm font-semibold text-slate-600">
-            CN
-          </div>
-        </nav>
-      </header>
+      <Navigation />
+      <GroupLabel group={4} />
 
       {/* Main Content */}
-      <main className="px-[90px] py-8">
+      <main className="px-4 sm:px-6 md:px-12 lg:px-16 xl:px-[90px] py-8">
         {/* Page Title */}
-        <h1 className="text-[30px] font-semibold tracking-tight text-slate-700 mb-8">
+        <h1 className="text-xl md:text-2xl lg:text-[30px] font-semibold tracking-tight text-slate-700 mb-8">
           Create a Community Story
         </h1>
 
         {/* Upload Photo Section */}
         <div className="mb-8 flex justify-center">
-          <div className="w-[222px] h-[207px] relative opacity-40">
+          <div className="w-40 h-40 md:w-52 md:h-48 lg:w-[222px] lg:h-[207px] relative opacity-40">
             <Camera className="w-[77px] h-[70px] text-slate-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           </div>
         </div>
@@ -79,7 +65,7 @@ export default function CreateStoryPage() {
           <h2 className="text-xl font-semibold text-slate-700 px-6 py-2">
             Add Location
           </h2>
-          <div className="flex gap-5 mt-2">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 mt-2">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-500" />
@@ -100,7 +86,7 @@ export default function CreateStoryPage() {
           <h2 className="text-xl font-semibold text-slate-700 px-6 py-2">
             Tell us about your trip
           </h2>
-          <div className="mt-2 border border-purple-900 rounded-[15px] p-6 min-h-[382px]">
+          <div className="mt-2 border border-purple-900 rounded-[15px] p-6 min-h-48 md:min-h-64 lg:min-h-[382px]">
             <p className="text-sm text-slate-500">
               Share about your trip with maximum 100 words
             </p>
@@ -113,7 +99,7 @@ export default function CreateStoryPage() {
           <p className="text-sm text-slate-500 mt-1">
             Upload and share your amazing travel photo
           </p>
-          <div className="mt-4 w-[222px] h-[207px] border border-dashed border-black rounded flex items-center justify-center">
+          <div className="mt-4 w-40 h-40 md:w-52 md:h-48 lg:w-[222px] lg:h-[207px] border border-dashed border-black rounded flex items-center justify-center">
             <Image className="w-[101px] h-[101px] text-slate-300" />
           </div>
         </div>
@@ -125,9 +111,9 @@ export default function CreateStoryPage() {
           </h2>
           <div className="flex flex-col gap-7 mt-2">
             {/* Tag input */}
-            <div className="flex items-center gap-5">
-              <Plus className="w-6 h-6 text-slate-600" />
-              <div className="flex-1 max-w-[536px]">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+              <Plus className="w-6 h-6 text-slate-600 hidden sm:block" />
+              <div className="flex-1 sm:max-w-[536px]">
                 <div className="relative">
                   <Input
                     placeholder="Create Tags"
@@ -181,7 +167,7 @@ export default function CreateStoryPage() {
 
               <Button
                 disabled={!agreed}
-                className="w-[308px] h-[51px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-slate-50 text-sm font-semibold disabled:opacity-50"
+                className="w-full sm:w-auto sm:min-w-[308px] h-[51px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-slate-50 text-sm font-semibold disabled:opacity-50"
               >
                 Submit
               </Button>

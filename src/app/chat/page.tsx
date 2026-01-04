@@ -2,15 +2,18 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  ChatSidebar, 
-  ChatHeader, 
-  ChatInput, 
-  AssistantMessage, 
+import {
+  ChatSidebar,
+  ChatHeader,
+  ChatInput,
+  AssistantMessage,
   UserMessage,
-  QuickActions 
+  QuickActions
 } from "@/components/chat";
 import type { ChatMessageProps } from "@/components/chat";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
+import { PlayerAvatar } from "@/components/shared/player-avatar";
 
 // Initial welcome messages for different contexts
 const welcomeMessages: Record<string, ChatMessageProps[]> = {
@@ -164,36 +167,36 @@ export default function ChatPage() {
   // Landing view
   if (showLanding) {
     return (
-      <div className="relative flex h-screen overflow-hidden bg-white">
+      <div className="relative flex flex-col min-h-screen overflow-hidden bg-white">
+        <Navigation />
+        <GroupLabel group={1} />
         {/* Gradient Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
             className="absolute w-[2805px] h-[1080px] opacity-80"
             style={{
               background: `
-                radial-gradient(circle at 114% 61%, rgba(130, 29, 53, 1) 0%, rgba(241, 40, 68, 0) 100%),
-                radial-gradient(circle at 100% 100%, rgba(31, 92, 140, 1) 0%, rgba(77, 163, 236, 0) 100%),
-                radial-gradient(circle at 105% 13%, rgba(165, 32, 232, 1) 0%, rgba(189, 107, 231, 1) 50%, rgba(237, 104, 255, 0) 100%),
-                radial-gradient(circle at 83% -5%, rgba(9, 250, 142, 1) 0%, rgba(9, 250, 238, 0) 100%),
-                radial-gradient(circle at 99% 112%, rgba(77, 163, 236, 1) 0%, rgba(77, 163, 236, 0) 100%),
+                radial-gradient(circle at 114% 61%, rgba(130, 29, 53, 0.4) 0%, rgba(241, 40, 68, 0) 100%),
+                radial-gradient(circle at 100% 100%, rgba(31, 92, 140, 0.4) 0%, rgba(77, 163, 236, 0) 100%),
+                radial-gradient(circle at 105% 13%, rgba(165, 32, 232, 0.5) 0%, rgba(189, 107, 231, 0.3) 50%, rgba(237, 104, 255, 0) 100%),
+                radial-gradient(circle at 83% -5%, rgba(9, 250, 142, 0.3) 0%, rgba(9, 250, 238, 0) 100%),
+                radial-gradient(circle at 99% 112%, rgba(77, 163, 236, 0.4) 0%, rgba(77, 163, 236, 0) 100%),
                 #FFFFFF
               `,
               filter: "blur(400px)",
-              left: "-50%",
-              top: "-5%",
+              left: "-723px",
+              top: "-28px",
             }}
           />
         </div>
 
         {/* Main Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center flex-1 px-4">
+        <div className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 py-12">
           <div className="flex flex-col items-center gap-10 w-full max-w-[832px]">
             {/* Header */}
             <div className="flex flex-col items-center gap-3">
-              {/* Logo */}
-              <div className="w-8 h-8 rounded-lg bg-[#313131] flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-sm">T</span>
-              </div>
+              {/* Animated Player Avatar */}
+              <PlayerAvatar autoAnimate size={80} />
               <h1 className="text-3xl font-semibold text-neutral-600 text-center tracking-tight">
                 Trevllo.ai — Smarter Planning. Smoother Journeys.
               </h1>
@@ -216,7 +219,10 @@ export default function ChatPage() {
 
   // Chat view
   return (
-    <div className="flex h-screen overflow-hidden bg-white">
+    <div className="flex flex-col h-screen overflow-hidden bg-white">
+      <Navigation />
+      <GroupLabel group={1} />
+      <div className="flex flex-1 overflow-hidden">
       {/* Sidebar */}
       <ChatSidebar
         activeChat={activeChat}
@@ -228,22 +234,22 @@ export default function ChatPage() {
 
       {/* Main Content */}
       <div className="flex flex-col flex-1 relative">
-        {/* Gradient Background - subtle for chat view */}
+        {/* Gradient Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
-            className="absolute w-[2805px] h-[1080px] opacity-10"
+            className="absolute w-[2805px] h-[1080px] opacity-80"
             style={{
               background: `
-                radial-gradient(circle at 114% 61%, rgba(130, 29, 53, 1) 0%, rgba(241, 40, 68, 0) 100%),
-                radial-gradient(circle at 100% 100%, rgba(31, 92, 140, 1) 0%, rgba(77, 163, 236, 0) 100%),
-                radial-gradient(circle at 105% 13%, rgba(165, 32, 232, 1) 0%, rgba(189, 107, 231, 1) 50%, rgba(237, 104, 255, 0) 100%),
-                radial-gradient(circle at 83% -5%, rgba(9, 250, 142, 1) 0%, rgba(9, 250, 238, 0) 100%),
-                radial-gradient(circle at 99% 112%, rgba(77, 163, 236, 1) 0%, rgba(77, 163, 236, 0) 100%),
+                radial-gradient(circle at 114% 61%, rgba(130, 29, 53, 0.4) 0%, rgba(241, 40, 68, 0) 100%),
+                radial-gradient(circle at 100% 100%, rgba(31, 92, 140, 0.4) 0%, rgba(77, 163, 236, 0) 100%),
+                radial-gradient(circle at 105% 13%, rgba(165, 32, 232, 0.5) 0%, rgba(189, 107, 231, 0.3) 50%, rgba(237, 104, 255, 0) 100%),
+                radial-gradient(circle at 83% -5%, rgba(9, 250, 142, 0.3) 0%, rgba(9, 250, 238, 0) 100%),
+                radial-gradient(circle at 99% 112%, rgba(77, 163, 236, 0.4) 0%, rgba(77, 163, 236, 0) 100%),
                 #FFFFFF
               `,
               filter: "blur(400px)",
-              left: "-100%",
-              top: "-5%",
+              left: "-723px",
+              top: "-28px",
             }}
           />
         </div>
@@ -275,6 +281,7 @@ export default function ChatPage() {
 
         {/* Input Area */}
         <ChatInput onSend={handleSend} />
+      </div>
       </div>
     </div>
   );

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home -->
+  <url>
+    <loc>https://jalanjalan.com/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Group 1: AI Chat Assistant -->
+  <url>
+    <loc>https://jalanjalan.com/chat</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Group 2: Wanderboard Dashboard -->
+  <url>
+    <loc>https://jalanjalan.com/wanderboard</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/dashboard</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/dashboard/budget</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/dashboard/schedule</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/dashboard/itinerary</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Group 3: Informatics (My Travel) -->
+  <url>
+    <loc>https://jalanjalan.com/informatics</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/informatics/dashboard</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/informatics/insights</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/informatics/planner</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/informatics/reflection</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/informatics/settings</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/informatics/settings/profile</loc>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/informatics/settings/privacy</loc>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- Group 4: Community -->
+  <url>
+    <loc>https://jalanjalan.com/community</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/community/stories</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/community/stories/create</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/community/events</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/login</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/register</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Group 5: Smart Predictions -->
+  <url>
+    <loc>https://jalanjalan.com/predictions</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/predictions/preferences</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jalanjalan.com/predictions/plan</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Other -->
+  <url>
+    <loc>https://jalanjalan.com/search</loc>
+    <priority>0.6</priority>
+  </url>
+</urlset>

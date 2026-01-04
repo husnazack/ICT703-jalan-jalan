@@ -46,7 +46,7 @@ export default function PrivacyPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto pb-8">
+    <div className="min-h-screen bg-background flex flex-col pb-8">
       {/* Header */}
       <div className="px-6 pt-8 pb-4">
         <div className="flex items-center gap-3 mb-2">

@@ -7,29 +7,61 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   Home,
-  Search,
-  Map,
-  Calendar,
+  Sparkles,
+  LayoutDashboard,
+  Wallet,
   Users,
-  BarChart3,
   MessageCircle,
   Menu,
   X,
+  ChevronDown,
+  Bot,
+  Compass,
 } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/search", label: "Search", icon: Search },
-  { href: "/dashboard/itinerary", label: "Trip Planning", icon: Map },
-  { href: "/dashboard/schedule", label: "Schedule", icon: Calendar },
+  {
+    href: "/predictions",
+    label: "Plan Trip",
+    icon: Sparkles,
+    children: [
+      { href: "/predictions", label: "Smart Planner", icon: Compass, description: "AI-powered trip planning" },
+      { href: "/chat", label: "AI Assistant", icon: Bot, description: "Chat with our travel AI" },
+    ]
+  },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/informatics/dashboard", label: "My Travel", icon: Wallet },
   { href: "/community", label: "Community", icon: Users },
-  { href: "/insights", label: "Insights", icon: BarChart3 },
-  { href: "/chat", label: "AI Assistant", icon: MessageCircle },
 ];
 
 export function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  const isItemActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+
+    if (openDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openDropdown]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -47,11 +79,68 @@ export function Navigation() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.slice(0, 5).map((item) => {
+            {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || 
-                (item.href !== "/" && pathname.startsWith(item.href));
-              
+              const hasChildren = "children" in item && item.children;
+              const isActive = isItemActive(item.href) ||
+                (hasChildren && item.children?.some(child => isItemActive(child.href)));
+
+              if (hasChildren) {
+                const isDropdownOpen = openDropdown === item.href;
+                return (
+                  <div
+                    key={item.href}
+                    className="relative"
+                    ref={dropdownRef}
+                  >
+                    <Button
+                      variant={isActive || isDropdownOpen ? "secondary" : "ghost"}
+                      size="sm"
+                      className={cn(
+                        "gap-2 transition-all",
+                        (isActive || isDropdownOpen) && "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-300"
+                      )}
+                      onClick={() => setOpenDropdown(isDropdownOpen ? null : item.href)}
+                    >
+                      <Icon className="size-4" />
+                      {item.label}
+                      <ChevronDown className={cn("size-3 transition-transform", isDropdownOpen && "rotate-180")} />
+                    </Button>
+
+                    {isDropdownOpen && (
+                      <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-900 rounded-lg shadow-lg border py-2 z-50">
+                        {item.children?.map((child) => {
+                          const ChildIcon = child.icon;
+                          const isChildActive = isItemActive(child.href);
+                          return (
+                            <Link 
+                              key={child.href} 
+                              href={child.href}
+                              onClick={() => setOpenDropdown(null)}
+                            >
+                              <div className={cn(
+                                "px-4 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-950 cursor-pointer",
+                                isChildActive && "bg-emerald-50 dark:bg-emerald-950"
+                              )}>
+                                <div className="flex items-center gap-3">
+                                  <ChildIcon className={cn("size-4", isChildActive ? "text-emerald-600" : "text-muted-foreground")} />
+                                  <div>
+                                    <div className={cn("text-sm font-medium", isChildActive && "text-emerald-700 dark:text-emerald-300")}>
+                                      {child.label}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground">{child.description}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
               return (
                 <Link key={item.href} href={item.href}>
                   <Button
@@ -72,14 +161,17 @@ export function Navigation() {
 
           {/* Right side actions */}
           <div className="flex items-center gap-2">
-            <Link href="/chat" className="hidden md:block">
-              <Button 
-                variant="default" 
+            <Link href="/login" className="hidden md:block">
+              <Button variant="ghost" size="sm">
+                Login
+              </Button>
+            </Link>
+            <Link href="/register" className="hidden md:block">
+              <Button
                 size="sm"
                 className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0"
               >
-                <MessageCircle className="size-4 mr-2" />
-                AI Assistant
+                Sign Up
               </Button>
             </Link>
 
@@ -101,12 +193,45 @@ export function Navigation() {
             <div className="flex flex-col gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname === item.href || 
-                  (item.href !== "/" && pathname.startsWith(item.href));
-                
+                const hasChildren = "children" in item && item.children;
+                const isActive = isItemActive(item.href);
+
+                if (hasChildren) {
+                  return (
+                    <div key={item.href} className="space-y-1">
+                      <div className="px-4 py-2 text-sm font-medium text-muted-foreground flex items-center gap-2">
+                        <Icon className="size-4" />
+                        {item.label}
+                      </div>
+                      {item.children?.map((child) => {
+                        const ChildIcon = child.icon;
+                        const isChildActive = isItemActive(child.href);
+                        return (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            <Button
+                              variant={isChildActive ? "secondary" : "ghost"}
+                              className={cn(
+                                "w-full justify-start gap-3 pl-8",
+                                isChildActive && "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
+                              )}
+                            >
+                              <ChildIcon className="size-4" />
+                              {child.label}
+                            </Button>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+
                 return (
-                  <Link 
-                    key={item.href} 
+                  <Link
+                    key={item.href}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -123,6 +248,18 @@ export function Navigation() {
                   </Link>
                 );
               })}
+
+              {/* Mobile auth links */}
+              <div className="border-t mt-2 pt-2 flex flex-col gap-1">
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">Login</Button>
+                </Link>
+                <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
             </div>
           </nav>
         )}

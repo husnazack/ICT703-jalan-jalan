@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { BottomNavigation } from "@/components/informatics";
 
 const spendingCategories = [
   { name: "Accommodation", icon: Hotel, amount: 4200, percentage: 35, trend: "down" as const, change: -5 },
@@ -43,11 +42,11 @@ const destinationStats = [
   { destination: "East Asia", trips: 2, avgSpend: 5200, satisfaction: 95 },
 ];
 
-const travelPatterns = [
-  { label: "Average Trip Duration", value: "6.5 days", trend: "up" as const },
-  { label: "Preferred Booking Window", value: "3 weeks", trend: "stable" as const },
-  { label: "Most Visited Month", value: "December", trend: "stable" as const },
-  { label: "Budget Adherence Rate", value: "78%", trend: "up" as const },
+const travelPatterns: { label: string; value: string; trend: "up" | "down" | "stable" }[] = [
+  { label: "Average Trip Duration", value: "6.5 days", trend: "up" },
+  { label: "Preferred Booking Window", value: "3 weeks", trend: "stable" },
+  { label: "Most Visited Month", value: "December", trend: "stable" },
+  { label: "Budget Adherence Rate", value: "78%", trend: "up" },
 ];
 
 export default function InsightsPage() {
@@ -55,7 +54,7 @@ export default function InsightsPage() {
   const totalSpent = monthlyData.reduce((sum, d) => sum + d.spent, 0);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto pb-24">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="px-6 pt-8 pb-4">
         <div className="mb-2">
@@ -245,7 +244,6 @@ export default function InsightsPage() {
         </Card>
       </div>
 
-      <BottomNavigation />
     </div>
   );
 }

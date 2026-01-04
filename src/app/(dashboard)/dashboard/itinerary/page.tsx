@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Navigation } from "@/components/shared/navigation";
@@ -271,10 +272,10 @@ const activityColors: Record<string, string> = {
   activity: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300",
 };
 
-export default function ItineraryPage() {
+function ItineraryContent() {
   const searchParams = useSearchParams();
   const destinationParam = searchParams.get("destination");
-  
+
   const [trip, setTrip] = React.useState(sampleTrip);
   const [expandedDays, setExpandedDays] = React.useState<string[]>(["day-1", "day-2"]);
   const [showAIAssistant, setShowAIAssistant] = React.useState(false);
@@ -693,5 +694,17 @@ export default function ItineraryPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function ItineraryPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+      </div>
+    }>
+      <ItineraryContent />
+    </Suspense>
   );
 }

@@ -20,16 +20,16 @@ export function ChatLanding({ onSend, onQuickAction, onBack }: ChatLandingProps)
           className="absolute w-[2805px] h-[1080px] opacity-80"
           style={{
             background: `
-              radial-gradient(circle at 114% 61%, rgba(130, 29, 53, 1) 0%, rgba(241, 40, 68, 0) 100%),
-              radial-gradient(circle at 100% 100%, rgba(31, 92, 140, 1) 0%, rgba(77, 163, 236, 0) 100%),
-              radial-gradient(circle at 105% 13%, rgba(165, 32, 232, 1) 0%, rgba(189, 107, 231, 1) 50%, rgba(237, 104, 255, 0) 100%),
-              radial-gradient(circle at 83% -5%, rgba(9, 250, 142, 1) 0%, rgba(9, 250, 238, 0) 100%),
-              radial-gradient(circle at 99% 112%, rgba(77, 163, 236, 1) 0%, rgba(77, 163, 236, 0) 100%),
+              radial-gradient(circle at 114% 61%, rgba(130, 29, 53, 0.4) 0%, rgba(241, 40, 68, 0) 100%),
+              radial-gradient(circle at 100% 100%, rgba(31, 92, 140, 0.4) 0%, rgba(77, 163, 236, 0) 100%),
+              radial-gradient(circle at 105% 13%, rgba(165, 32, 232, 0.5) 0%, rgba(189, 107, 231, 0.3) 50%, rgba(237, 104, 255, 0) 100%),
+              radial-gradient(circle at 83% -5%, rgba(9, 250, 142, 0.3) 0%, rgba(9, 250, 238, 0) 100%),
+              radial-gradient(circle at 99% 112%, rgba(77, 163, 236, 0.4) 0%, rgba(77, 163, 236, 0) 100%),
               #FFFFFF
             `,
             filter: "blur(400px)",
-            left: "-50%",
-            top: "-5%",
+            left: "-723px",
+            top: "-28px",
           }}
         />
       </div>
