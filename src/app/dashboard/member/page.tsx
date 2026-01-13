@@ -1,22 +1,20 @@
 "use client";  // Add this directive to mark the file as a Client Component
 
-import { useState } from "react";
-import { Navigation } from "@/components/shared/navigation"; 
-import TabBar from "../../components/ui/TabBar";  // Corrected path
 
-export default function DashboardPage() {
-  const [attractionFilter, setAttractionFilter] = useState<"All" | "Open">("All");
+import { Navigation } from "@/components/shared/navigation";
+import TabBar from "@/components/ui/TabBar"; // Correct relative path for Members Page
 
+export default function MembersPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950 relative">
       {/* Navigation Bar */}
       <Navigation />
-      
+
       {/* Tab Bar Below Navigation */}
       <TabBar />
 
-      <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-8">
-        {/* Dashboard content */}
+      <main className="container mx-auto px-6 lg:px-24 py-8">
+        {/* Members content */}
         <div className="bg-yellow-100 p-4 text-center rounded-md mb-8">
           <p className="text-lg font-semibold text-yellow-800">
             This page is currently under development. Please check back later.
