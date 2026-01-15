@@ -115,7 +115,7 @@ export default function CommunityPage() {
             <EventCard
               title="Cuti Cuti Muslim-Friendly Fair"
               subtitle="Muslim-friendly travel packages and experiences"
-              date="18- 20 January 2026"
+              date="18 - 20 January 2026"
               location="Ayer Molek, Melaka"
               type="Travel Fair"
               badges={["Muslim-friendly", "Travel Deals"]}
@@ -125,7 +125,7 @@ export default function CommunityPage() {
             <EventCard
               title="Play Your Way to Joy Festival"
               subtitle="Interactive activities and attractions for all ages"
-              date="5- 7 February 2026"
+              date="5 - 7 February 2026"
               location="Pantai Klebang, Melaka"
               type="Festival"
               badges={["Family-friendly", "Popular Event"]}
