@@ -28,9 +28,8 @@ const TabBar = () => {
         {/* Dashboard Tab */}
         <Link href="/dashboard" passHref>
           <span
-            className={`cursor-pointer text-lg font-semibold ${
-              isActive("dashboard") ? "text-blue-700" : "text-gray-600"
-            }`}
+            className={`cursor-pointer text-lg font-semibold ${isActive("dashboard") ? "text-blue-700" : "text-gray-600"
+              }`}
           >
             Dashboard
           </span>
@@ -39,9 +38,8 @@ const TabBar = () => {
         {/* Members Tab */}
         <Link href="/dashboard/member" passHref>
           <span
-            className={`cursor-pointer text-lg font-semibold ${
-              isActive("member") ? "text-blue-700" : "text-gray-600"
-            }`}
+            className={`cursor-pointer text-lg font-semibold ${isActive("member") ? "text-blue-700" : "text-gray-600"
+              }`}
           >
             Members
           </span>
@@ -50,9 +48,8 @@ const TabBar = () => {
         {/* Itinerary Tab */}
         <Link href="/dashboard/itenary" passHref>
           <span
-            className={`cursor-pointer text-lg font-semibold ${
-              isActive("itenary") ? "text-blue-700" : "text-gray-600"
-            }`}
+            className={`cursor-pointer text-lg font-semibold ${isActive("itenary") ? "text-blue-700" : "text-gray-600"
+              }`}
           >
             Itinerary
           </span>
