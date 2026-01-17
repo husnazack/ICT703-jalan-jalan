@@ -155,8 +155,10 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-50 to-slate-100 text-slate-900">
-      <Navigation />
-      <TabBar />
+      <div className="sticky top-0 z-20">
+        <Navigation />
+        <TabBar />
+      </div>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-8">
         <div className="flex flex-col gap-6">

@@ -23,12 +23,13 @@ export default function MembersPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950 relative">
-      <Navigation />
-
-      <TabBar />
+      <div className="sticky top-0 z-20">
+        <Navigation />
+        <TabBar />
+      </div>
 
       <main className="container mx-auto px-6 lg:px-24 py-8">
-        {pathname === '/dashboard/member' && (
+        {pathname === "/dashboard/member" && (
           <div className="space-y-6">
             <PreferenceChart members={members} />
             <IndividualMemberDetails members={members} />
