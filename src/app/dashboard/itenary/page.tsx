@@ -234,8 +234,10 @@ export default function ItineraryPage() {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-violet-50 to-slate-100">
-      <Navigation />
-      <TabBar totalCost={totalCost} memberCount={memberCount} />
+      <div className="sticky top-0 z-20">
+        <Navigation />
+        <TabBar totalCost={totalCost} memberCount={memberCount} />
+      </div>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-8">
         <div className="flex flex-col gap-6">
