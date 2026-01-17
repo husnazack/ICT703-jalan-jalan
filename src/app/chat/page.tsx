@@ -126,30 +126,88 @@ export default function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = (message: string) => {
-    if (showLanding) {
-      setShowLanding(false);
-    }
+  // const handleSend = (message: string) => {
+  //   if (showLanding) {
+  //     setShowLanding(false);
+  //   }
 
+  //   const newUserMessage: ChatMessageProps = {
+  //     role: "user",
+  //     content: message,
+  //     timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+  //   };
+
+  //   setMessages((prev) => [...prev, newUserMessage]);
+
+  //   // Simulate assistant response
+  //   setTimeout(() => {
+  //     const assistantResponse: ChatMessageProps = {
+  //       role: "assistant",
+  //       content: `I received your message: "${message}". This is a demo response. In a real implementation, this would connect to an AI service to provide context-aware travel assistance.`,
+  //       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+  //     };
+  //     setMessages((prev) => [...prev, assistantResponse]);
+  //   }, 1000);
+  // };
+
+  const handleSend = async (message: string) => {
+    if (showLanding) setShowLanding(false);
+  
     const newUserMessage: ChatMessageProps = {
       role: "user",
       content: message,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
-
+  
     setMessages((prev) => [...prev, newUserMessage]);
-
-    // Simulate assistant response
-    setTimeout(() => {
-      const assistantResponse: ChatMessageProps = {
-        role: "assistant",
-        content: `I received your message: "${message}". This is a demo response. In a real implementation, this would connect to an AI service to provide context-aware travel assistance.`,
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      };
-      setMessages((prev) => [...prev, assistantResponse]);
-    }, 1000);
+  
+    // optional typing indicator
+    const typingMsg: ChatMessageProps = {
+      role: "assistant",
+      content: "Typing...",
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+    setMessages((prev) => [...prev, typingMsg]);
+  
+    try {
+      const res = await fetch("https://farisdaus.app.n8n.cloud/webhook/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          userId: "faris",
+          chatId: activeChat, // keep conversation id
+        }),
+      });
+  
+      const data = await res.json();
+  
+      setMessages((prev) => {
+        const withoutTyping = prev.slice(0, -1);
+        const assistantResponse: ChatMessageProps = {
+          role: "assistant",
+          content: data?.reply ?? "No reply returned",
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        };
+        return [...withoutTyping, assistantResponse];
+      });
+    } catch (err) {
+      setMessages((prev) => {
+        const withoutTyping = prev.slice(0, -1);
+        return [
+          ...withoutTyping,
+          {
+            role: "assistant",
+            content:
+              "Request failed (likely CORS). If so, use the /api/chat route method instead.",
+            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          },
+        ];
+      });
+    }
   };
-
+  
+  
   const handleQuickAction = (actionId: string) => {
     setShowLanding(false);
     setMessages(welcomeMessages[actionId] || welcomeMessages.default);
