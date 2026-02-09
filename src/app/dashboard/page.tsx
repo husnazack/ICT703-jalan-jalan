@@ -27,6 +27,12 @@ import {
   Users,
   Wallet,
   LayoutDashboard,
+  ArrowRight,
+  ShieldAlert,
+  Bell,
+  Users2,
+  MapPin,
+} from "lucide-react"
 
 const seasonLabels: Record<string, string> = {
   "chinese-new-year": "Chinese New Year",
@@ -61,8 +67,6 @@ const summaryIconGradients = [
   "bg-gradient-to-br from-pink-400 to-pink-600",
   "bg-gradient-to-br from-blue-400 to-blue-700",
 ];
-  ArrowRight,
-} from "lucide-react"
 import { ConflictItem, SummaryStat, DashboardDestination } from "@/types"
 
 /* =======================
@@ -1269,7 +1273,5 @@ function MelakaPlaceGuideCard({
     </div>
   );
 }
-
-<br></br>
 
 export default DashboardPage;

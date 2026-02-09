@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
+import { put } from '@vercel/blob'
 
 // Get OpenAI API key from environment variable
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
@@ -360,14 +359,6 @@ export async function POST(request: NextRequest) {
     const timestamp = Math.floor(Date.now() / 1000)
     const filename = `data-group-${groupId}-${timestamp}.json`
 
-    // Directory path
-    const saveDirectory = path.join(process.cwd(), 'public', 'data-travel-group-5')
-
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(saveDirectory)) {
-      fs.mkdirSync(saveDirectory, { recursive: true })
-    }
-
     // Prepare complete trip data
     const tripData = {
       group_id: data.group_id,
@@ -382,14 +373,17 @@ export async function POST(request: NextRequest) {
       generated_plan: generatedPlan
     }
 
-    // Save file
-    const filePath = path.join(saveDirectory, filename)
-    fs.writeFileSync(filePath, JSON.stringify(tripData, null, 2), 'utf8')
+    // Save to Vercel Blob Storage
+    const blob = await put(
+      `data-travel-group-5/${filename}`,
+      JSON.stringify(tripData, null, 2),
+      { access: 'public', contentType: 'application/json' }
+    )
 
     return NextResponse.json({
       success: true,
       file: filename,
-      path: `public/data-travel-group-5/${filename}`,
+      url: blob.url,
       message: 'Comprehensive travel plan generated and saved successfully',
       plan: generatedPlan
     })
