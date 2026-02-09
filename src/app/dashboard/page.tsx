@@ -1,10 +1,24 @@
 "use client";
 
-import * as React from "react";
-import { Navigation } from "@/components/shared/navigation";
-import TabBar from "../../components/ui/TabBar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import * as React from "react"
+import Link from "next/link"
+import { Navigation } from "@/components/shared/navigation"
+import TabBar from "../../components/ui/TabBar"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   AlertTriangle,
   CalendarDays,
@@ -13,17 +27,6 @@ import {
   Users,
   Wallet,
   LayoutDashboard,
-  Users2,
-  MapPin,
-  ShieldAlert,
-  Bell,
-} from "lucide-react";
-
-import { ConflictItem, SummaryStat } from "@/types";
-
-/* =======================
-   LABEL MAPS
-======================= */
 
 const seasonLabels: Record<string, string> = {
   "chinese-new-year": "Chinese New Year",
@@ -58,6 +61,9 @@ const summaryIconGradients = [
   "bg-gradient-to-br from-pink-400 to-pink-600",
   "bg-gradient-to-br from-blue-400 to-blue-700",
 ];
+  ArrowRight,
+} from "lucide-react"
+import { ConflictItem, SummaryStat, DashboardDestination } from "@/types"
 
 /* =======================
    HELPERS
@@ -656,7 +662,7 @@ const DashboardPage = () => {
                   <div key={s.label} className="flex items-start gap-3 rounded-xl bg-white">
                     <div className={"shrink-0 rounded-2xl " + summaryIconGradients[i] + " p-4 flex items-center justify-center"}>
                       {React.isValidElement(s.icon)
-                        ? React.cloneElement(s.icon, { className: "size-10 text-white" })
+                        ? React.cloneElement(s.icon as React.ReactElement<{ className?: string }>, { className: "size-10 text-white" })
                         : null}
                     </div>
                     <div className="min-w-0">
@@ -978,6 +984,16 @@ const DashboardPage = () => {
                     </div>
                   );
                 })}
+              </div>
+
+              {/* View Itinerary Button */}
+              <div className="mt-6 flex justify-center">
+                <Link href="/dashboard/itenary">
+                  <Button className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg shadow-violet-500/25">
+                    View Full Itinerary
+                    <ArrowRight className="ml-2 size-4" />
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
