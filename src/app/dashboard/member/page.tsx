@@ -27,6 +27,83 @@ import {
 } from "recharts";
 
 /* =======================
+   CUSTOM PIE LABEL RENDERER
+======================= */
+
+const RADIAN = Math.PI / 180;
+
+const renderCustomLabel = ({
+  cx,
+  cy,
+  midAngle,
+  outerRadius,
+  name,
+  percent,
+}: any) => {
+  const radius = outerRadius + 35; // Increase distance from pie
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  
+  // Determine text anchor based on position
+  const textAnchor = x > cx ? 'start' : 'end';
+  
+  // Split long names into multiple lines
+  const words = name.split(' ');
+  const lines: string[] = [];
+  let currentLine = '';
+  
+  words.forEach((word: string, idx: number) => {
+    const testLine = currentLine ? `${currentLine} ${word}` : word;
+    if (testLine.length > 15 && currentLine) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = testLine;
+    }
+    
+    if (idx === words.length - 1 && currentLine) {
+      lines.push(currentLine);
+    }
+  });
+  
+  // If only one line, display with percentage
+  if (lines.length === 1) {
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#64748b"
+        textAnchor={textAnchor}
+        dominantBaseline="central"
+        style={{ fontSize: '11px', fontWeight: '500' }}
+      >
+        {name} {percent}%
+      </text>
+    );
+  }
+  
+  // Multiple lines - show name on multiple lines, percentage below
+  return (
+    <text
+      x={x}
+      y={y - (lines.length * 6)}
+      fill="#64748b"
+      textAnchor={textAnchor}
+      style={{ fontSize: '11px', fontWeight: '500' }}
+    >
+      {lines.map((line, idx) => (
+        <tspan key={idx} x={x} dy={idx === 0 ? 0 : 12}>
+          {line}
+        </tspan>
+      ))}
+      <tspan x={x} dy={12} style={{ fontWeight: '600' }}>
+        {percent}%
+      </tspan>
+    </text>
+  );
+};
+
+/* =======================
    LABEL MAPS
 ======================= */
 
@@ -41,6 +118,20 @@ const seasonLabels: Record<string, string> = {
   merdeka: "Merdeka Day",
   "malaysia-day": "Malaysia Day",
   "school-holidays": "School Holidays",
+};
+
+// Short labels for pie chart display
+const seasonShortLabels: Record<string, string> = {
+  "chinese-new-year": "CNY",
+  "hari-raya-aidilfitri": "Aidilfitri",
+  "hari-raya-haji": "Raya Haji",
+  deepavali: "Deepavali",
+  thaipusam: "Thaipusam",
+  wesak: "Wesak",
+  christmas: "Christmas",
+  merdeka: "Merdeka",
+  "malaysia-day": "M'sia Day",
+  "school-holidays": "School Hol.",
 };
 
 const travelStyleLabels: Record<string, string> = {
@@ -224,15 +315,16 @@ const avgPositionPct =
   const seasonPie = Object.entries(seasonCounts)
     .map(([key, count]) => ({
       key,
-      name: seasonLabels[key] || key,
+      name: seasonShortLabels[key] || seasonLabels[key] || key,
+      fullName: seasonLabels[key] || key,
       count,
       percent: totalSeasonSelections
         ? Math.round((count / totalSeasonSelections) * 100)
         : 0,
       fill: getRankColor(count, maxSeasonCount),
     }))
-    .filter((d) => d.count > 0)
-    .sort((a, b) => b.count - a.count);
+    .filter((d: { count: number }) => d.count > 0)
+    .sort((a: { count: number }, b: { count: number }) => b.count - a.count);
 
   return (
     <div
@@ -294,7 +386,7 @@ const avgPositionPct =
                         <BarChart
                           data={travelStyleChart}
                           layout="vertical"
-                          margin={{ top: 8, right: 20, left: 24, bottom: 8 }}
+                          margin={{ top: 8, right: 40, left: 0, bottom: 8 }}
                         >
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis type="number" hide />
@@ -383,7 +475,7 @@ const avgPositionPct =
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart
                           data={crowdChart}
-                          margin={{ top: 12, right: 12, left: 0, bottom: 6 }}
+                          margin={{ top: 20, right: 12, left: 0, bottom: 6 }}
                         >
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis
@@ -458,33 +550,35 @@ const avgPositionPct =
                   <div className="text-sm font-semibold text-slate-800">
                     Season Preference
                   </div>
-
-                  <div className="mt-1 text-sm text-slate-600">
-                    Seasons selected by the group (sum = 100%)
+                   <div className="mt-2 text-2xl font-bold text-slate-900">
+                    Christmas
                   </div>
 
-                  <div className="mt-4 h-[220px]">
+                  <div className="mt-1 text-sm text-slate-600">
+                    Seasons selected by the group 
+                  </div>
+
+                  <div className="mt-4 h-[320px]" style={{ overflow: 'visible' }}>
                     {seasonPie.length === 0 ? (
                       <div className="text-sm text-slate-600">No data</div>
                     ) : (
                       <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
+                        <PieChart margin={{ top: 30, right: 70, bottom: 30, left: 70 }} style={{ overflow: 'visible' }}>
                           <Tooltip
                             formatter={(value: any, _name: any, props: any) => {
                               const p = props?.payload?.percent ?? 0;
-                              return [`${value} (${p}%)`, "Selections"];
+                              return [`${value} (${p}%)`, props?.payload?.fullName || props?.payload?.name];
                             }}
                           />
                           <Pie
                             data={seasonPie}
                             dataKey="count"
                             nameKey="name"
-                            innerRadius={50}
-                            outerRadius={80}
+                            innerRadius={35}
+                            outerRadius={55}
                             paddingAngle={2}
-                            label={({ payload }: any) =>
-                              payload.name + " " + payload.percent + "%"
-                            }
+                            label={renderCustomLabel}
+                            labelLine={{ stroke: '#94a3b8', strokeWidth: 1 }}
                           >
                             {seasonPie.map((s, i) => (
                               <Cell
@@ -512,7 +606,7 @@ const avgPositionPct =
                               style={{ backgroundColor: s.fill }}
                             />
                             <span className="text-xs text-slate-700 truncate">
-                              {s.name}
+                              {s.fullName}
                             </span>
                           </div>
                           <span className="text-xs font-semibold text-slate-800">

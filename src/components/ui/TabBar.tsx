@@ -40,6 +40,12 @@ const dayDiffInclusive = (start?: string, end?: string) => {
 const TabBar = () => {
   const pathname = usePathname();
   const [data, setData] = React.useState<TripData | null>(null);
+  
+  // Refs for tab elements
+  const tabBarRef = React.useRef<HTMLDivElement>(null);
+  const dashboardRef = React.useRef<HTMLAnchorElement>(null);
+  const membersRef = React.useRef<HTMLAnchorElement>(null);
+  const itineraryRef = React.useRef<HTMLAnchorElement>(null);
 
   React.useEffect(() => {
     const run = async () => {
@@ -86,13 +92,15 @@ const TabBar = () => {
     active,
     label,
     icon,
+    innerRef, // Added innerRef prop
   }: {
     href: string;
     active: boolean;
     label: string;
     icon: React.ReactNode;
+    innerRef?: React.Ref<HTMLAnchorElement>; // Define innerRef type
   }) => (
-    <Link href={href} className="flex flex-col items-center group min-w-[90px]">
+    <Link href={href} ref={innerRef} className="flex flex-col items-center group min-w-[90px] relative pt-6 pb-1.5">
       <span
         className={
           "flex items-center gap-2 font-semibold text-base md:text-lg transition-colors duration-200 " +
@@ -113,24 +121,23 @@ const TabBar = () => {
         </span>
         {label}
       </span>
-      <span
-        className={
-          "mt-2 h-1 w-full rounded-full transition-all duration-200 " +
-          (active ? "bg-[#AD46FF]" : "bg-transparent")
-        }
-      />
+      {/* Active indicator bar positioned on the border line */}
+      {active && (
+        <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#AD46FF] rounded-t-sm"></div>
+      )}
     </Link>
   );
 
   return (
-    <div className="sticky top-0 z-10 bg-white border-b border-[#AD46FF]/40">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 flex justify-between items-center">
-        <nav className="flex items-center gap-14 py-5">
+    <div ref={tabBarRef} className="sticky top-0 z-10 bg-white border-b border-[#AD46FF]/30 relative"> {/* Added ref and relative positioning */}
+      <div className="container mx-auto px-5 sm:px-6 lg:px-12 xl:px-24 flex justify-between items-end">
+        <nav className="flex items-end gap-14 relative">
           <TabLink
             href="/dashboard"
             active={isActive("dashboard")}
             label="Main"
             icon={<LayoutDashboard className="size-5" />}
+            innerRef={dashboardRef} // Pass ref
           />
 
           <TabLink
@@ -138,6 +145,7 @@ const TabBar = () => {
             active={isActive("member")}
             label="Members"
             icon={<Users className="size-5" />}
+            innerRef={membersRef} // Pass ref
           />
 
           <TabLink
@@ -145,10 +153,11 @@ const TabBar = () => {
             active={isActive("itenary")}
             label="Itinerary"
             icon={<MapPin className="size-5" />}
+            innerRef={itineraryRef} // Pass ref
           />
         </nav>
 
-        {/* ✅ Compact, important trip summary (from JSON) */}
+        {/* Compact, important trip summary (from JSON) */}
         <div className="flex items-center gap-4 py-4">
           {/* Destination + dates */}
           <div className="hidden sm:flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
