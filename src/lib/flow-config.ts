@@ -138,14 +138,6 @@ const nextStepsMap: Record<string, NextStep[]> = {
   "/predictions": [
     { path: "/chat", label: "Need Help?", description: "Ask our AI assistant", group: 1 },
   ],
-  "/predictions/preferences": [
-    { path: "/chat", label: "Need Help?", description: "Ask our AI assistant", group: 1 },
-  ],
-  "/predictions/plan": [
-    { path: "/dashboard", label: "View Live Data", description: "Real-time destination info", group: 2, primary: true },
-    { path: "/informatics/dashboard", label: "Track Budget", description: "Monitor expenses", group: 3 },
-    { path: "/chat", label: "Refine with AI", description: "Get suggestions", group: 1 },
-  ],
   "/chat": [
     { path: "/predictions", label: "Plan a Trip", description: "Create your itinerary", group: 5, primary: true },
     { path: "/dashboard/itenary", label: "View Itinerary", description: "See your trip plan", group: 2 },

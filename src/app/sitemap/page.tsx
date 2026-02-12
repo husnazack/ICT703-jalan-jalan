@@ -26,7 +26,6 @@ import {
   UserPlus,
   ShieldCheck,
   FileText,
-  SlidersHorizontal,
   ClipboardList,
   ArrowRight,
   ArrowDown,
@@ -321,25 +320,12 @@ const groups: GroupConfig[] = [
         icon: Sparkles,
         description: "First step of the planning wizard. Collects destination input, travel date range picker, and number of travelers selector. Validates and stores data in session before proceeding."
       },
-      {
-        path: "/predictions/preferences",
-        label: "Travel Preferences",
-        icon: SlidersHorizontal,
-        description: "Second step collecting travel style preferences: budget range, accommodation type, activity interests (adventure, culture, relaxation, food), pace preference, and accessibility needs."
-      },
-      {
-        path: "/predictions/plan",
-        label: "AI-Generated Plan",
-        icon: ClipboardList,
-        description: "Final step displaying the AI-generated personalized itinerary based on inputs. Shows day-by-day plan with activities, estimated costs, time allocations, and alternative suggestions."
-      },
     ],
     userFlow: {
       steps: [
         { text: "Enter destination, travel dates, number of travelers", path: "/predictions" },
-        { text: "Select travel preferences and style", path: "/predictions/preferences" },
-        { text: "Receive AI-generated personalized itinerary", path: "/predictions/plan" },
-        { text: "Review and customize the plan", path: "/predictions/plan" }
+        { text: "Set travel preferences and generate AI plan", path: "/predictions" },
+        { text: "Review and customize the plan", path: "/predictions" }
       ],
       entryPoints: ["Home CTA 'Plan Your Trip'", "Nav 'Smart Planner'"]
     }

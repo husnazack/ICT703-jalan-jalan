@@ -146,9 +146,7 @@ const groups = [
     borderClass: "border-rose-500/30",
     textClass: "text-rose-600 dark:text-rose-400",
     pages: [
-      { path: "/predictions", name: "Trip Details", description: "Enter trip information" },
-      { path: "/predictions/preferences", name: "Preferences", description: "Set travel preferences" },
-      { path: "/predictions/plan", name: "Your Plan", description: "AI-generated travel plan" },
+      { path: "/predictions", name: "Smart Planner", description: "AI-powered trip planning wizard" },
     ],
     features: [
       "AI itinerary generation",
@@ -177,9 +175,8 @@ const userJourneys = [
     name: "Planning a Trip",
     description: "Users actively planning their next adventure",
     steps: [
-      { group: 5, action: "Enter trip details", page: "/predictions" },
-      { group: 5, action: "Set preferences", page: "/predictions/preferences" },
-      { group: 5, action: "Review AI plan", page: "/predictions/plan" },
+      { group: 5, action: "Enter trip details & preferences", page: "/predictions" },
+      { group: 5, action: "Review AI-generated plan", page: "/predictions" },
       { group: 2, action: "Check live data", page: "/dashboard" },
       { group: 3, action: "Set budget", page: "/informatics/planner" },
     ],
