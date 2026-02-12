@@ -7,11 +7,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
   Home,
-  Sparkles,
   LayoutDashboard,
   Wallet,
-  Users,
-  MessageCircle,
   Menu,
   X,
   ChevronDown,
@@ -26,15 +23,8 @@ import {
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
-  {
-    href: "/predictions",
-    label: "Plan Trip",
-    icon: Sparkles,
-    children: [
-      { href: "/predictions", label: "Smart Planner", icon: Compass, description: "AI-powered trip planning" },
-      { href: "/chat", label: "AI Assistant", icon: Bot, description: "Chat with our travel AI" },
-    ]
-  },
+  { href: "/predictions", label: "Smart Planner", icon: Compass },
+  { href: "/chat", label: "Trevllo AI", icon: Bot },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   {
     href: "/informatics/dashboard",
@@ -47,7 +37,6 @@ const navItems = [
       { href: "/informatics/reflection", label: "Reflection", icon: BookOpen, description: "Write trip reflections" },
     ]
   },
-  { href: "/community", label: "Community", icon: Users },
 ];
 
 export function Navigation() {

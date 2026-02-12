@@ -113,7 +113,7 @@ export const groupConfig: Record<GroupNumber, GroupConfig> = {
 
 export const userJourneys: Record<JourneyType, FlowStep[]> = {
   "first-time": [
-    { path: "/", label: "Home", description: "Start here", group: 5 },
+    { path: "/", label: "Home", description: "Start here", group: 4 },
     { path: "/predictions", label: "Plan", description: "Create trip", group: 5 },
     { path: "/chat", label: "AI Help", description: "Get assistance", group: 1 },
     { path: "/dashboard", label: "Dashboard", description: "Live data", group: 2 },
@@ -148,6 +148,7 @@ const nextStepsMap: Record<string, NextStep[]> = {
   ],
   "/chat": [
     { path: "/predictions", label: "Plan a Trip", description: "Create your itinerary", group: 5, primary: true },
+    { path: "/dashboard/itenary", label: "View Itinerary", description: "See your trip plan", group: 2 },
     { path: "/dashboard", label: "Check Dashboard", description: "View live data", group: 2 },
   ],
   "/dashboard": [
@@ -208,6 +209,7 @@ export function getNextSteps(currentPath: string, max: number = 3): NextStep[] {
 }
 
 export function getGroupForPath(path: string): GroupNumber | null {
+  if (path === "/") return 4;
   if (path.startsWith("/chat")) return 1;
   if (path.startsWith("/dashboard") || path.startsWith("/wanderboard")) return 2;
   if (path.startsWith("/informatics")) return 3;
