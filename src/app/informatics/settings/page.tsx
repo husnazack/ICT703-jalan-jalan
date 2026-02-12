@@ -2,182 +2,209 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { RotateCcw, User, Bell, Shield, HelpCircle, ChevronRight, LogOut } from "lucide-react";
+import {
+  RotateCcw,
+  User,
+  Bell,
+  Shield,
+  HelpCircle,
+  ChevronRight,
+  LogOut,
+  Settings,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
+import {
+  AnimatedBackground,
+  UnifiedCard,
+  PageHeader,
+} from "@/components/shared/page-layout";
+import { FlowGuide } from "@/components/shared/flow-guide";
+import { cn } from "@/lib/utils";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { STORAGE_KEYS, DEFAULT_PROFILE, type UserProfile } from "@/lib/settings-defaults";
 
 export default function SettingsPage() {
   const router = useRouter();
+  const [profile] = useLocalStorage<UserProfile>(STORAGE_KEYS.profile, DEFAULT_PROFILE);
   const [notifications, setNotifications] = useState(true);
   const [priceAlerts, setPriceAlerts] = useState(true);
   const [weeklyReport, setWeeklyReport] = useState(false);
-
-  const settingsSections = [
-    {
-      title: "Account",
-      items: [
-        { icon: User, label: "Edit Profile", action: "profile" },
-        { icon: Shield, label: "Privacy Settings", action: "privacy" },
-      ],
-    },
-    {
-      title: "Preferences",
-      items: [
-        {
-          icon: Bell,
-          label: "Push Notifications",
-          toggle: true,
-          value: notifications,
-          onChange: setNotifications,
-        },
-        {
-          icon: Bell,
-          label: "Price Drop Alerts",
-          toggle: true,
-          value: priceAlerts,
-          onChange: setPriceAlerts,
-        },
-        {
-          icon: Bell,
-          label: "Weekly Summary",
-          toggle: true,
-          value: weeklyReport,
-          onChange: setWeeklyReport,
-        },
-      ],
-    },
-    {
-      title: "Support",
-      items: [{ icon: HelpCircle, label: "Help Centre", action: "help" }],
-    },
-  ];
 
   const handleResetPlanning = () => {
     router.push("/informatics");
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <div className="px-6 pt-8 pb-4">
-        <div className="mb-2">
-          <p className="text-muted-foreground text-sm">Preferences</p>
-          <h1 className="text-2xl font-bold text-foreground">Settings</h1>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white dark:bg-neutral-950 relative">
+      <Navigation />
+      <GroupLabel group={3} />
+      <AnimatedBackground variant="subtle" />
 
-      {/* User Profile Card */}
-      <div className="px-6 mb-6">
-        <Card className="p-4">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        {/* Header */}
+        <PageHeader
+          title="Settings"
+          subtitle="Manage your preferences & account"
+          icon={<Settings className="size-7 text-white" />}
+        />
+
+        {/* User Profile Card */}
+        <UnifiedCard gradient className="p-5 mb-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <span className="text-2xl">👤</span>
+            <div className="size-16 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900/40 dark:to-purple-900/40 flex items-center justify-center flex-shrink-0">
+              <span className="text-2xl">{profile.avatar}</span>
             </div>
-            <div>
-              <h3 className="font-semibold text-foreground">Travel Explorer</h3>
-              <p className="text-muted-foreground text-sm">explorer@email.com</p>
-              <p className="text-primary text-xs mt-1">Premium Member</p>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-neutral-800 dark:text-neutral-100">{profile.name}</h3>
+              <p className="text-neutral-500 dark:text-neutral-400 text-sm">{profile.email}</p>
+              <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 text-xs font-medium">
+                Premium Member
+              </span>
             </div>
           </div>
-        </Card>
-      </div>
+        </UnifiedCard>
 
-      {/* Settings Sections */}
-      {settingsSections.map((section) => (
-        <div key={section.title} className="px-6 mb-6">
-          <h2 className="font-semibold text-foreground mb-3">{section.title}</h2>
-          <Card className="overflow-hidden">
-            {section.items.map((item, index) => {
-              const hasAction = "action" in item;
-              const handleClick = () => {
-                if (hasAction && item.action === "profile") router.push("/informatics/settings/profile");
-                else if (hasAction && item.action === "privacy") router.push("/informatics/settings/privacy");
-              };
-
-              const hasToggle = "toggle" in item && item.toggle;
-              const content = (
-                <>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <item.icon className="w-4 h-4 text-primary" />
-                    </div>
-                    <span className="text-foreground text-sm">{item.label}</span>
-                  </div>
-                  {hasToggle && "value" in item && "onChange" in item ? (
-                    <Switch checked={item.value} onCheckedChange={item.onChange} />
-                  ) : (
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                  )}
-                </>
-              );
-
-              return hasAction ? (
-                <button
-                  key={item.label}
-                  onClick={handleClick}
-                  className={`w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors ${
-                    index < section.items.length - 1 ? "border-b border-border" : ""
-                  }`}
-                >
-                  {content}
-                </button>
-              ) : (
-                <div
-                  key={item.label}
-                  className={`flex items-center justify-between p-4 ${
-                    index < section.items.length - 1 ? "border-b border-border" : ""
-                  }`}
-                >
-                  {content}
+        {/* Account Section */}
+        <div className="mb-6">
+          <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100 mb-4">Account</h2>
+          <div className="space-y-3">
+            <UnifiedCard hover className="p-0 overflow-hidden">
+              <button
+                onClick={() => router.push("/informatics/settings/profile")}
+                className="w-full flex items-center gap-3 p-4 transition-colors"
+              >
+                <div className="size-10 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center flex-shrink-0">
+                  <User className="size-5 text-violet-600 dark:text-violet-400" />
                 </div>
-              );
-            })}
-          </Card>
-        </div>
-      ))}
-
-      {/* Reset Travel Planning */}
-      <div className="px-6 mb-6">
-        <h2 className="font-semibold text-foreground mb-3">Data Management</h2>
-        <Card className="overflow-hidden">
-          <button
-            onClick={handleResetPlanning}
-            className="w-full flex items-center justify-between p-4 hover:bg-yellow-500/5 transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
-                <RotateCcw className="w-4 h-4 text-yellow-600" />
-              </div>
-              <div className="text-left">
-                <span className="text-foreground text-sm block">Reset Travel Planning</span>
-                <span className="text-muted-foreground text-xs">
-                  Clear all trips and start fresh
+                <span className="flex-1 text-left font-medium text-neutral-800 dark:text-neutral-100 text-sm">
+                  Edit Profile
                 </span>
+                <ChevronRight className="size-5 text-neutral-400" />
+              </button>
+            </UnifiedCard>
+
+            <UnifiedCard hover className="p-0 overflow-hidden">
+              <button
+                onClick={() => router.push("/informatics/settings/privacy")}
+                className="w-full flex items-center gap-3 p-4 transition-colors"
+              >
+                <div className="size-10 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center flex-shrink-0">
+                  <Shield className="size-5 text-violet-600 dark:text-violet-400" />
+                </div>
+                <span className="flex-1 text-left font-medium text-neutral-800 dark:text-neutral-100 text-sm">
+                  Privacy Settings
+                </span>
+                <ChevronRight className="size-5 text-neutral-400" />
+              </button>
+            </UnifiedCard>
+          </div>
+        </div>
+
+        {/* Preferences Section */}
+        <div className="mb-6">
+          <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100 mb-4">Preferences</h2>
+          <div className="space-y-3">
+            <UnifiedCard className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="size-10 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center flex-shrink-0">
+                  <Bell className="size-5 text-violet-600 dark:text-violet-400" />
+                </div>
+                <span className="flex-1 font-medium text-neutral-800 dark:text-neutral-100 text-sm">
+                  Push Notifications
+                </span>
+                <Switch checked={notifications} onCheckedChange={setNotifications} />
               </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
-          </button>
-        </Card>
-      </div>
+            </UnifiedCard>
 
-      {/* Sign Out */}
-      <div className="px-6 mb-6">
-        <Button
-          variant="outline"
-          className="w-full rounded-xl border-red-500/30 text-red-600 hover:bg-red-500/10"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Sign Out
-        </Button>
-      </div>
+            <UnifiedCard className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="size-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
+                  <Bell className="size-5 text-amber-600 dark:text-amber-400" />
+                </div>
+                <span className="flex-1 font-medium text-neutral-800 dark:text-neutral-100 text-sm">
+                  Price Drop Alerts
+                </span>
+                <Switch checked={priceAlerts} onCheckedChange={setPriceAlerts} />
+              </div>
+            </UnifiedCard>
 
-      {/* App Version */}
-      <div className="px-6 text-center">
-        <p className="text-muted-foreground text-xs">Travel Pulse v1.0.0</p>
-      </div>
+            <UnifiedCard className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="size-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0">
+                  <Bell className="size-5 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <span className="flex-1 font-medium text-neutral-800 dark:text-neutral-100 text-sm">
+                  Weekly Summary
+                </span>
+                <Switch checked={weeklyReport} onCheckedChange={setWeeklyReport} />
+              </div>
+            </UnifiedCard>
+          </div>
+        </div>
 
+        {/* Support Section */}
+        <div className="mb-6">
+          <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100 mb-4">Support</h2>
+          <UnifiedCard hover className="p-0 overflow-hidden">
+            <button className="w-full flex items-center gap-3 p-4 transition-colors">
+              <div className="size-10 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center flex-shrink-0">
+                <HelpCircle className="size-5 text-violet-600 dark:text-violet-400" />
+              </div>
+              <span className="flex-1 text-left font-medium text-neutral-800 dark:text-neutral-100 text-sm">
+                Help Centre
+              </span>
+              <ChevronRight className="size-5 text-neutral-400" />
+            </button>
+          </UnifiedCard>
+        </div>
+
+        {/* Data Management */}
+        <div className="mb-6">
+          <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100 mb-4">Data Management</h2>
+          <UnifiedCard hover className="p-0 overflow-hidden">
+            <button
+              onClick={handleResetPlanning}
+              className="w-full flex items-center gap-3 p-4 transition-colors"
+            >
+              <div className="size-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
+                <RotateCcw className="size-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div className="flex-1 min-w-0 text-left">
+                <p className="font-medium text-neutral-800 dark:text-neutral-100 text-sm">Reset Travel Planning</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">Clear all trips and start fresh</p>
+              </div>
+              <ChevronRight className="size-5 text-neutral-400 flex-shrink-0" />
+            </button>
+          </UnifiedCard>
+        </div>
+
+        {/* Sign Out */}
+        <div className="mb-8">
+          <Button
+            variant="outline"
+            className="w-full rounded-xl border-red-500/30 text-red-600 hover:bg-red-500/10 h-12 text-base"
+            size="lg"
+          >
+            <LogOut className="size-4 mr-2" />
+            Sign Out
+          </Button>
+        </div>
+
+        {/* App Version */}
+        <p className="text-neutral-400 dark:text-neutral-500 text-xs text-center mb-8">
+          Travel Pulse v1.0.0
+        </p>
+
+        {/* Flow Guide */}
+        <FlowGuide
+          variant="card"
+          title="Continue Your Journey"
+          maxSuggestions={2}
+        />
+      </main>
     </div>
   );
 }
-

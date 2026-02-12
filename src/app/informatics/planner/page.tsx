@@ -15,9 +15,9 @@ import {
   Car,
   MoreHorizontal,
   Receipt,
+  CalendarRange,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import {
   Dialog,
@@ -29,95 +29,54 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Navigation } from "@/components/shared/navigation";
+import { GroupLabel } from "@/components/shared/group-label";
+import {
+  AnimatedBackground,
+  UnifiedCard,
+  PageHeader,
+} from "@/components/shared/page-layout";
+import { FlowGuide } from "@/components/shared/flow-guide";
+import { useLocalStorage } from "@/hooks/use-local-storage";
+import { STORAGE_KEYS, DEFAULT_UPCOMING_TRIPS, type UpcomingTrip } from "@/lib/settings-defaults";
 
-const upcomingTrips = [
-  {
-    id: 1,
-    destination: "Paris",
-    country: "France",
-    dates: "Dec 20 - Dec 30",
-    budget: 9500,
-    status: "planning",
-    image: "🗼",
-  },
-  {
-    id: 2,
-    destination: "Langkawi",
-    country: "Malaysia",
-    dates: "Jan 5 - Jan 8",
-    budget: 1800,
-    status: "confirmed",
-    image: "🏝️",
-  },
-  {
-    id: 3,
-    destination: "Barcelona",
-    country: "Spain",
-    dates: "Feb 14 - Feb 21",
-    budget: 7200,
-    status: "planning",
-    image: "⛪",
-  },
-  {
-    id: 4,
-    destination: "Cameron Highlands",
-    country: "Malaysia",
-    dates: "Mar 1 - Mar 3",
-    budget: 800,
-    status: "confirmed",
-    image: "🌿",
-  },
-];
+const TRIP_EMOJIS = ["🏝️", "🌿", "🍜", "🏔️", "🌊", "🏛️", "🎒", "✈️", "🗺️", "🌸"];
 
 const pastTrips = [
   {
     id: 5,
-    destination: "London",
-    country: "United Kingdom",
-    dates: "Sep 5 - Sep 15",
-    spent: 6800,
-    budget: 6500,
-    image: "🎡",
+    destination: "Johor Bahru",
+    country: "Malaysia",
+    dates: "May 5 - May 7",
+    spent: 700,
+    budget: 800,
+    image: "🏖️",
   },
   {
     id: 6,
-    destination: "Penang",
+    destination: "Kuching",
     country: "Malaysia",
-    dates: "Aug 12 - Aug 14",
-    spent: 650,
-    budget: 900,
-    image: "🍜",
+    dates: "Apr 12 - Apr 15",
+    spent: 1100,
+    budget: 1200,
+    image: "🐱",
   },
   {
     id: 7,
-    destination: "Amsterdam",
-    country: "Netherlands",
-    dates: "Jul 20 - Jul 27",
-    spent: 5200,
-    budget: 5000,
-    image: "🌷",
-  },
-  {
-    id: 8,
-    destination: "Melaka",
+    destination: "Ipoh",
     country: "Malaysia",
-    dates: "Jun 8 - Jun 10",
-    spent: 450,
-    budget: 600,
-    image: "🏛️",
-  },
-  {
-    id: 9,
-    destination: "Rome",
-    country: "Italy",
-    dates: "May 1 - May 10",
-    spent: 7100,
-    budget: 6800,
-    image: "🏟️",
+    dates: "Mar 8 - Mar 10",
+    spent: 480,
+    budget: 500,
+    image: "🍲",
   },
 ];
 
 export default function PlannerPage() {
+  const [upcomingTrips, setUpcomingTrips] = useLocalStorage<UpcomingTrip[]>(
+    STORAGE_KEYS.upcomingTrips,
+    DEFAULT_UPCOMING_TRIPS
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tripData, setTripData] = useState({
     destination: "",
@@ -148,7 +107,28 @@ export default function PlannerPage() {
     setTripData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const formatDateRange = (start: string, end: string): string => {
+    if (!start || !end) return "TBD";
+    const s = new Date(start);
+    const e = new Date(end);
+    const fmt = (d: Date) =>
+      d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return `${fmt(s)} - ${fmt(e)}`;
+  };
+
   const handleSave = () => {
+    if (tripData.destination) {
+      const newTrip: UpcomingTrip = {
+        id: Date.now(),
+        destination: tripData.destination,
+        country: tripData.country || "Malaysia",
+        dates: formatDateRange(tripData.startDate, tripData.endDate),
+        budget: calculateTotal(),
+        status: "planning",
+        image: TRIP_EMOJIS[Math.floor(Math.random() * TRIP_EMOJIS.length)],
+      };
+      setUpcomingTrips((prev) => [...prev, newTrip]);
+    }
     setIsModalOpen(false);
     setTripData({
       destination: "",
@@ -165,157 +145,172 @@ export default function PlannerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <div className="px-6 pt-8 pb-4">
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <p className="text-muted-foreground text-sm">Your Journeys</p>
-            <h1 className="text-2xl font-bold text-foreground">Trip Planner</h1>
-          </div>
-          <Button size="sm" className="rounded-xl" onClick={() => setIsModalOpen(true)}>
-            <Plus className="w-4 h-4 mr-1" />
-            New Trip
-          </Button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white dark:bg-neutral-950 relative">
+      <Navigation />
+      <GroupLabel group={3} />
+      <AnimatedBackground variant="subtle" />
 
-      {/* Active Trip */}
-      <div className="px-6 mb-6">
-        <h2 className="font-semibold text-foreground mb-3">Active Trip</h2>
-        <Link href="/informatics/planner/1/expenses">
-          <Card className="p-4 border-2 border-primary/30 hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center text-2xl">
-                🗼
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-foreground">Paris</h3>
-                  <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
-                    Active
-                  </span>
-                </div>
-                <p className="text-muted-foreground text-sm">France</p>
-                <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    Dec 20 - Dec 30
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Wallet className="w-3 h-3" />
-                    RM 880 / 9,500
-                  </span>
-                </div>
-                {/* Budget Progress */}
-                <Progress value={9} className="mt-2 h-1.5" />
-              </div>
-              <div className="flex flex-col items-center gap-1">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                  <Receipt className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <span className="text-[10px] text-muted-foreground">Expenses</span>
-              </div>
-            </div>
-          </Card>
-        </Link>
-      </div>
+      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8">
+        {/* Header */}
+        <PageHeader
+          title="Trip Tracker"
+          subtitle="Log expenses, review spending & reflect"
+          icon={<CalendarRange className="size-7 text-white" />}
+          action={
+            <Button
+              size="sm"
+              className="rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white border-0"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              New Trip
+            </Button>
+          }
+        />
 
-      {/* Upcoming Trips */}
-      <div className="px-6 mb-6">
-        <h2 className="font-semibold text-foreground mb-3">Upcoming</h2>
-        <div className="space-y-3">
-          {upcomingTrips.map((trip) => (
-            <Card key={trip.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+        {/* Active Trip */}
+        <div className="mb-6">
+          <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100 mb-4">Active Trip</h2>
+          <Link href="/informatics/planner/1/expenses">
+            <UnifiedCard gradient className="p-5">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-2xl">
-                  {trip.image}
+                <div className="size-14 rounded-2xl bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900/40 dark:to-purple-900/40 flex items-center justify-center text-2xl shadow-sm">
+                  🏛️
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-foreground">{trip.destination}</h3>
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full ${
-                        trip.status === "confirmed"
-                          ? "bg-green-500/10 text-green-600"
-                          : "bg-yellow-500/10 text-yellow-600"
-                      }`}
-                    >
-                      {trip.status === "confirmed" ? "Confirmed" : "Planning"}
+                    <h3 className="font-semibold text-neutral-800 dark:text-neutral-100">Melaka</h3>
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 font-medium">
+                      Active
                     </span>
                   </div>
-                  <p className="text-muted-foreground text-sm">{trip.country}</p>
-                  <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                  <p className="text-neutral-500 dark:text-neutral-400 text-sm">Malaysia</p>
+                  <div className="flex items-center gap-4 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
-                      {trip.dates}
+                      Jun 8 - Jun 10
                     </span>
                     <span className="flex items-center gap-1">
                       <Wallet className="w-3 h-3" />
-                      RM {trip.budget.toLocaleString()}
+                      RM 390 / 600
                     </span>
                   </div>
+                  <Progress value={65} className="mt-2 h-1.5" />
                 </div>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                <div className="flex flex-col items-center gap-1">
+                  <div className="size-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-lg shadow-violet-500/25">
+                    <Receipt className="w-5 h-5 text-white" />
+                  </div>
+                  <span className="text-[10px] text-neutral-500 dark:text-neutral-400">Expenses</span>
+                </div>
               </div>
-            </Card>
-          ))}
+            </UnifiedCard>
+          </Link>
         </div>
-      </div>
 
-      {/* AI Suggestion */}
-      <div className="px-6 mb-6">
-        <Card className="p-4 border-primary/20 bg-primary/5">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="font-medium text-foreground text-sm mb-1">Trip Suggestion</p>
-              <p className="text-muted-foreground text-xs leading-relaxed">
-                Based on your budget and preferences, consider visiting Vietnam in February. Flights
-                are 30% cheaper and the weather is ideal for exploration.
-              </p>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Past Trips */}
-      <div className="px-6 mb-6">
-        <h2 className="font-semibold text-foreground mb-3">Past Trips</h2>
-        <div className="space-y-3">
-          {pastTrips.map((trip) => {
-            const overBudget = trip.spent > trip.budget;
-            return (
-              <Card key={trip.id} className="p-4">
+        {/* Upcoming Trips */}
+        <div className="mb-6">
+          <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100 mb-4">Upcoming</h2>
+          <div className="space-y-3">
+            {upcomingTrips.map((trip) => (
+              <UnifiedCard key={trip.id} className="p-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center text-xl">
+                  <div className="size-14 rounded-xl bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center text-2xl">
                     {trip.image}
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-medium text-foreground">{trip.destination}</h3>
+                      <h3 className="font-semibold text-neutral-800 dark:text-neutral-100">{trip.destination}</h3>
                       <span
-                        className={`text-sm font-semibold ${
-                          overBudget ? "text-yellow-600" : "text-green-600"
+                        className={`text-xs px-2 py-1 rounded-full font-medium ${
+                          trip.status === "confirmed"
+                            ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400"
+                            : "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"
                         }`}
                       >
-                        RM {trip.spent.toLocaleString()}
+                        {trip.status === "confirmed" ? "Confirmed" : "Planning"}
                       </span>
                     </div>
-                    <p className="text-muted-foreground text-xs">{trip.dates}</p>
-                    <Progress
-                      value={Math.min((trip.spent / trip.budget) * 100, 100)}
-                      className="mt-2 h-1.5"
-                    />
+                    <p className="text-neutral-500 dark:text-neutral-400 text-sm">{trip.country}</p>
+                    <div className="flex items-center gap-4 mt-2 text-xs text-neutral-500 dark:text-neutral-400">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {trip.dates}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Wallet className="w-3 h-3" />
+                        RM {trip.budget.toLocaleString()}
+                      </span>
+                    </div>
                   </div>
+                  <ChevronRight className="w-5 h-5 text-neutral-400" />
                 </div>
-              </Card>
-            );
-          })}
+              </UnifiedCard>
+            ))}
+          </div>
         </div>
-      </div>
+
+        {/* AI Suggestion */}
+        <div className="mb-6">
+          <UnifiedCard gradient className="p-5">
+            <div className="flex items-start gap-3">
+              <div className="size-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-violet-500/25">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="font-semibold text-neutral-800 dark:text-neutral-100 text-sm mb-1">Trip Suggestion</p>
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm leading-relaxed">
+                  Based on your Melaka spending, you&apos;re 35% under budget! Consider adding a river cruise
+                  or visiting more heritage sites to make the most of your trip.
+                </p>
+              </div>
+            </div>
+          </UnifiedCard>
+        </div>
+
+        {/* Past Trips */}
+        <div className="mb-8">
+          <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100 mb-4">Past Trips</h2>
+          <div className="space-y-3">
+            {pastTrips.map((trip) => {
+              const overBudget = trip.spent > trip.budget;
+              return (
+                <UnifiedCard key={trip.id} className="p-4">
+                  <div className="flex items-center gap-4">
+                    <div className="size-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-xl">
+                      {trip.image}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-medium text-neutral-800 dark:text-neutral-100">{trip.destination}</h3>
+                        <span
+                          className={`text-sm font-semibold ${
+                            overBudget ? "text-amber-600" : "text-emerald-600"
+                          }`}
+                        >
+                          RM {trip.spent.toLocaleString()}
+                        </span>
+                      </div>
+                      <p className="text-neutral-500 dark:text-neutral-400 text-xs">{trip.dates}</p>
+                      <Progress
+                        value={Math.min((trip.spent / trip.budget) * 100, 100)}
+                        className="mt-2 h-1.5"
+                      />
+                    </div>
+                  </div>
+                </UnifiedCard>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Flow Guide */}
+        <FlowGuide
+          variant="card"
+          title="Continue Your Journey"
+          maxSuggestions={2}
+        />
+      </main>
 
       {/* New Trip Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -331,7 +326,7 @@ export default function PlannerPage() {
               <Label htmlFor="destination">Destination</Label>
               <Input
                 id="destination"
-                placeholder="e.g., Tokyo"
+                placeholder="e.g., Langkawi"
                 value={tripData.destination}
                 onChange={(e) => handleInputChange("destination", e.target.value)}
               />
@@ -341,7 +336,7 @@ export default function PlannerPage() {
               <Label htmlFor="country">Country</Label>
               <Input
                 id="country"
-                placeholder="e.g., Japan"
+                placeholder="e.g., Malaysia"
                 value={tripData.country}
                 onChange={(e) => handleInputChange("country", e.target.value)}
               />
@@ -497,9 +492,9 @@ export default function PlannerPage() {
 
             {/* Total */}
             <div className="pt-4 border-t">
-              <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg">
+              <div className="flex items-center justify-between p-3 bg-violet-50 dark:bg-violet-900/20 rounded-lg">
                 <span className="font-semibold">Total Budget</span>
-                <span className="text-xl font-bold text-primary">
+                <span className="text-xl font-bold text-violet-600 dark:text-violet-400">
                   RM{" "}
                   {calculateTotal().toLocaleString(undefined, {
                     minimumFractionDigits: 2,
@@ -514,12 +509,12 @@ export default function PlannerPage() {
             <Button variant="outline" onClick={() => setIsModalOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleSave}>Save Trip</Button>
+            <Button onClick={handleSave} className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white border-0">
+              Save Trip
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
     </div>
   );
 }
-
