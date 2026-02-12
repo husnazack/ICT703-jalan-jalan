@@ -37,30 +37,9 @@ const quickActionMessages: Record<string, string> = {
   "emergency-helper": "Emergency and safety help",
 };
 
-// Welcome message shown at start of every conversation
-const welcomeMessage: ChatMessageProps = {
-  role: "assistant",
-  content: `I'll help you plan your perfect trip! You can ask me about:
-
-1. Crowd levels at popular destinations
-2. Itinerary planning
-3. Weather & best travel times
-4. Budget & expenses
-5. Local recommendations
-6. Emergency assistance
-
-What would you like to know?`,
-  timestamp: new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  }),
-};
-
 export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [messages, setMessages] = useState<ChatMessageProps[]>([
-    welcomeMessage,
-  ]);
+  const [messages, setMessages] = useState<ChatMessageProps[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [conversations, setConversations] = useState<ChatConversation[]>([]);
   const [showLanding, setShowLanding] = useState(true);
@@ -183,7 +162,7 @@ export default function ChatPage() {
   };
 
   const handleNewChat = () => {
-    setMessages([welcomeMessage]);
+    setMessages([]);
     setActiveConvId(null);
     setShowLanding(true);
   };
