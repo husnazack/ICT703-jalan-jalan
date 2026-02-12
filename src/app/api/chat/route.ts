@@ -247,6 +247,7 @@ function getResponse(message: string): string {
     { keys: ["attraction", "visit", "see", "places", "sightseeing", "tourist"], response: responses["attractions"] },
     { keys: ["transport", "bus", "taxi", "grab", "drive", "car", "getting around"], response: responses["transport"] },
     { keys: ["safety", "safe", "emergency", "police", "hospital", "danger"], response: responses["safety"] },
+    { keys: ["recommend", "suggestion"], response: responses["5"] },
     { keys: ["hello", "hi", "hey", "good morning", "good afternoon"], response: responses["hello"] },
     { keys: ["melaka", "malacca"], response: `Great choice! Melaka is a UNESCO World Heritage city with rich history and amazing food!\n\nWhat would you like to know?\n1. Crowd levels\n2. Itinerary planning\n3. Weather\n4. Budget tips\n5. Local recommendations\n6. Safety info` },
   ];

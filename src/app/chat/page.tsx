@@ -1,122 +1,75 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   ChatSidebar,
   ChatHeader,
   ChatInput,
   AssistantMessage,
   UserMessage,
-  QuickActions
+  QuickActions,
 } from "@/components/chat";
 import type { ChatMessageProps } from "@/components/chat";
 import { Navigation } from "@/components/shared/navigation";
 import { GroupLabel } from "@/components/shared/group-label";
 import { PlayerAvatar } from "@/components/shared/player-avatar";
 import { FlowGuide } from "@/components/shared/flow-guide";
-import { AnimatedBackground, UnifiedCard } from "@/components/shared/page-layout";
-import { cn } from "@/lib/utils";
+import {
+  AnimatedBackground,
+  UnifiedCard,
+} from "@/components/shared/page-layout";
+import {
+  loadConversations,
+  saveConversation,
+  deleteConversation,
+  generateId,
+  generateTitle,
+  type ChatConversation,
+} from "@/lib/chat-storage";
 
-// Initial welcome messages for different contexts
-const welcomeMessages: Record<string, ChatMessageProps[]> = {
-  default: [
-    {
-      role: "assistant",
-      content: `I'll help you plan your perfect trip! Are you looking to:
+// Map quick action IDs to messages sent through the chatbot
+const quickActionMessages: Record<string, string> = {
+  "crowd-check": "Check crowd levels",
+  "plan-itinerary": "Plan my itinerary",
+  "weather-travel": "Check weather and travel times",
+  "budget-expenses": "Budget and expenses tips",
+  "local-recommendations": "Local recommendations",
+  "emergency-helper": "Emergency and safety help",
+};
 
-1. Check crowd levels at popular destinations
-2. Plan your itinerary
-3. Check weather & best travel times
-4. Manage your trip budget
-5. Get local recommendations
-6. Find emergency assistance
+// Welcome message shown at start of every conversation
+const welcomeMessage: ChatMessageProps = {
+  role: "assistant",
+  content: `I'll help you plan your perfect trip! You can ask me about:
 
-Which would you prefer?`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    },
-  ],
-  "crowd-check": [
-    {
-      role: "assistant",
-      content: "I can help you check crowd levels at popular destinations! Which location in Malaysia would you like to check?",
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    },
-  ],
-  "budget-expenses": [
-    {
-      role: "assistant",
-      content: `I'll help you manage your travel budget! Are you looking to:
+1. Crowd levels at popular destinations
+2. Itinerary planning
+3. Weather & best travel times
+4. Budget & expenses
+5. Local recommendations
+6. Emergency assistance
 
-1. Set up a new trip budget
-2. Log an expense
-3. Track your current spending
-
-Which would you prefer?`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    },
-  ],
-  "plan-itinerary": [
-    {
-      role: "assistant",
-      content: `I'll help you plan your itinerary! Are you looking to:
-
-1. Where are you planning to go
-2. How many days will you be staying
-3. Do you want a relaxed trip or a packed schedule
-
-Which would you prefer?`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    },
-  ],
-  "weather-travel": [
-    {
-      role: "assistant",
-      content: `I'll help you check the weather and best travel timing! Are you looking to:
-
-1. Check the weather for your travel dates
-2. Find the best season to visit your destination
-3. Get the best time of day for specific activities
-
-Which would you prefer?`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    },
-  ],
-  "local-recommendations": [
-    {
-      role: "assistant",
-      content: `Are you looking for something nearby?
-
-1. What type of place do you want to explore: food, shopping, or attractions?
-2. Craving local flavors? Should I suggest street food, cafés, or fine dining?
-3. Do you want recommendations based on your current location or your itinerary?
-
-Which would you prefer?`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    },
-  ],
-  "emergency-helper": [
-    {
-      role: "assistant",
-      content: `Do you need urgent help?
-
-1. Would you like me to share safety tips for your area?
-2. Are you looking for the nearest hospital or clinic?
-3. Do you need directions to the nearest police station?
-
-Which would you prefer?`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    },
-  ],
+What would you like to know?`,
+  timestamp: new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  }),
 };
 
 export default function ChatPage() {
-  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [messages, setMessages] = useState<ChatMessageProps[]>(welcomeMessages.default);
-  const [activeChat, setActiveChat] = useState<string>("1");
+  const [messages, setMessages] = useState<ChatMessageProps[]>([
+    welcomeMessage,
+  ]);
+  const [activeConvId, setActiveConvId] = useState<string | null>(null);
+  const [conversations, setConversations] = useState<ChatConversation[]>([]);
   const [showLanding, setShowLanding] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Load chat history from localStorage on mount
+  useEffect(() => {
+    setConversations(loadConversations());
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -126,49 +79,61 @@ export default function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
-  // const handleSend = (message: string) => {
-  //   if (showLanding) {
-  //     setShowLanding(false);
-  //   }
+  // Persist conversation to localStorage whenever messages change (skip welcome-only and typing states)
+  const persistConversation = useCallback(
+    (convId: string, msgs: ChatMessageProps[]) => {
+      const userMessages = msgs.filter((m) => m.role === "user");
+      if (userMessages.length === 0) return;
 
-  //   const newUserMessage: ChatMessageProps = {
-  //     role: "user",
-  //     content: message,
-  //     timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-  //   };
-
-  //   setMessages((prev) => [...prev, newUserMessage]);
-
-  //   // Simulate assistant response
-  //   setTimeout(() => {
-  //     const assistantResponse: ChatMessageProps = {
-  //       role: "assistant",
-  //       content: `I received your message: "${message}". This is a demo response. In a real implementation, this would connect to an AI service to provide context-aware travel assistance.`,
-  //       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-  //     };
-  //     setMessages((prev) => [...prev, assistantResponse]);
-  //   }, 1000);
-  // };
+      const conv: ChatConversation = {
+        id: convId,
+        title: generateTitle(userMessages[0].content as string),
+        messages: msgs.map((m) => ({
+          role: m.role as "user" | "assistant",
+          content: m.content as string,
+          timestamp: m.timestamp || "",
+        })),
+        updatedAt: Date.now(),
+      };
+      saveConversation(conv);
+      setConversations(loadConversations());
+    },
+    []
+  );
 
   const handleSend = async (message: string) => {
+    // Determine conversation ID — create new if none active
+    let convId = activeConvId;
+    if (!convId) {
+      convId = generateId();
+      setActiveConvId(convId);
+    }
+
     if (showLanding) setShowLanding(false);
-  
+
     const newUserMessage: ChatMessageProps = {
       role: "user",
       content: message,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
-  
-    setMessages((prev) => [...prev, newUserMessage]);
-  
-    // optional typing indicator
+
+    const updatedWithUser = [...messages, newUserMessage];
+    setMessages(updatedWithUser);
+
+    // Typing indicator
     const typingMsg: ChatMessageProps = {
       role: "assistant",
       content: "Typing...",
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
-    setMessages((prev) => [...prev, typingMsg]);
-  
+    setMessages([...updatedWithUser, typingMsg]);
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -176,53 +141,84 @@ export default function ChatPage() {
         body: JSON.stringify({
           message,
           userId: "faris",
-          chatId: activeChat, // keep conversation id
+          chatId: convId,
         }),
       });
-  
+
       const data = await res.json();
-  
-      setMessages((prev) => {
-        const withoutTyping = prev.slice(0, -1);
-        const assistantResponse: ChatMessageProps = {
-          role: "assistant",
-          content: data?.reply ?? "No reply returned",
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        };
-        return [...withoutTyping, assistantResponse];
-      });
-    } catch (err) {
-      setMessages((prev) => {
-        const withoutTyping = prev.slice(0, -1);
-        return [
-          ...withoutTyping,
-          {
-            role: "assistant",
-            content:
-              "Sorry, I couldn't connect to the server. Please try again later.",
-            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-          },
-        ];
-      });
+
+      const assistantResponse: ChatMessageProps = {
+        role: "assistant",
+        content: data?.reply ?? "No reply returned",
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+
+      const finalMessages = [...updatedWithUser, assistantResponse];
+      setMessages(finalMessages);
+      persistConversation(convId, finalMessages);
+    } catch {
+      const errorMsg: ChatMessageProps = {
+        role: "assistant",
+        content:
+          "Sorry, I couldn't connect to the server. Please try again later.",
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      const finalMessages = [...updatedWithUser, errorMsg];
+      setMessages(finalMessages);
+      persistConversation(convId, finalMessages);
     }
   };
-  
-  
+
+  // Quick actions now send the message through the chatbot API
   const handleQuickAction = (actionId: string) => {
-    setShowLanding(false);
-    setMessages(welcomeMessages[actionId] || welcomeMessages.default);
+    const message =
+      quickActionMessages[actionId] || "Help me plan my trip";
+    handleSend(message);
   };
 
   const handleNewChat = () => {
-    setMessages(welcomeMessages.default);
+    setMessages([welcomeMessage]);
+    setActiveConvId(null);
     setShowLanding(true);
   };
 
   const handleSelectChat = (chatId: string) => {
-    setActiveChat(chatId);
+    const conv = conversations.find((c) => c.id === chatId);
+    if (!conv) return;
+
+    setActiveConvId(chatId);
     setShowLanding(false);
-    setMessages(welcomeMessages.default);
+    setMessages(
+      conv.messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+        timestamp: m.timestamp,
+      }))
+    );
   };
+
+  const handleDeleteChat = (chatId: string) => {
+    deleteConversation(chatId);
+    setConversations(loadConversations());
+
+    // If we deleted the active chat, go back to landing
+    if (activeConvId === chatId) {
+      handleNewChat();
+    }
+  };
+
+  // Sidebar chat list derived from localStorage conversations
+  const sidebarChats = conversations.map((c) => ({
+    id: c.id,
+    title: c.title,
+    updatedAt: c.updatedAt,
+  }));
 
   // Landing view
   if (showLanding) {
@@ -269,9 +265,11 @@ export default function ChatPage() {
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         <ChatSidebar
-          activeChat={activeChat}
+          chats={sidebarChats}
+          activeChat={activeConvId || undefined}
           onSelectChat={handleSelectChat}
           onNewChat={handleNewChat}
+          onDeleteChat={handleDeleteChat}
           isCollapsed={!sidebarOpen}
           onToggle={() => setSidebarOpen(!sidebarOpen)}
         />

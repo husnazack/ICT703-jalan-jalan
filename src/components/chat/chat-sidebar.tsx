@@ -1,21 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  Plus, 
-  MessageSquare, 
-  MoreVertical, 
-  Pencil, 
+import {
+  Plus,
+  MessageSquare,
   Trash2,
-  Menu
+  Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getRelativeTime } from "@/lib/chat-storage";
 
 interface Chat {
   id: string;
   title: string;
-  timestamp: string;
+  updatedAt: number;
 }
 
 interface ChatSidebarProps {
@@ -23,19 +22,17 @@ interface ChatSidebarProps {
   activeChat?: string;
   onSelectChat?: (id: string) => void;
   onNewChat?: () => void;
+  onDeleteChat?: (id: string) => void;
   isCollapsed?: boolean;
   onToggle?: () => void;
 }
 
 export function ChatSidebar({
-  chats = [
-    { id: "1", title: "Penang Budget Planning", timestamp: "2 hours ago" },
-    { id: "2", title: "Melaka Crowd Check", timestamp: "3 hours ago" },
-    { id: "3", title: "Cameron Highlands Weather", timestamp: "Yesterday" },
-  ],
+  chats = [],
   activeChat,
   onSelectChat,
   onNewChat,
+  onDeleteChat,
   isCollapsed = false,
   onToggle,
 }: ChatSidebarProps) {
@@ -80,6 +77,10 @@ export function ChatSidebar({
             <span className="text-sm font-medium text-slate-600">Chats</span>
           </div>
 
+          {chats.length === 0 && (
+            <p className="px-2 text-sm text-slate-400">No conversations yet</p>
+          )}
+
           {chats.map((chat) => (
             <div
               key={chat.id}
@@ -98,14 +99,21 @@ export function ChatSidebar({
                 <p className="text-sm font-medium text-foreground truncate">
                   {chat.title}
                 </p>
+                <p className="text-xs text-slate-400">
+                  {getRelativeTime(chat.updatedAt)}
+                </p>
               </div>
               {(hoveredChat === chat.id || activeChat === chat.id) && (
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-red-500"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteChat?.(chat.id);
+                  }}
                 >
-                  <MoreVertical className="w-4 h-4" />
+                  <Trash2 className="w-4 h-4" />
                 </Button>
               )}
             </div>
