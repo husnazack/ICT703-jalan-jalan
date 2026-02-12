@@ -17,19 +17,19 @@ import { cn } from "@/lib/utils";
 
 const insights = [
   {
-    text: "You tend to overspend on food by 20%. We have adjusted your next budget recommendation.",
+    text: "Your Melaka trip is 35% under budget at RM 390 of RM 600. Consider adding a river cruise or visiting more heritage sites!",
   },
   {
-    text: "You missed typical local events during your last travel period. Consider checking local calendars next time.",
+    text: "In Melaka, you spent only RM 90 on food out of RM 200 budgeted. Try the famous cendol at Jonker Street!",
   },
   {
-    text: "You travelled during the peak period. If you had travelled a week earlier, you could have saved around RM 50.00.",
+    text: "Your Melaka accommodation at RM 240 for 2 nights is a great deal. We saved this as a recommended stay for future trips.",
   },
   {
-    text: "Your accommodation costs have decreased by 15% compared to last year. Great job finding better deals!",
+    text: "You only spent RM 15 on transport in Melaka. Walking-friendly destinations help you save more on travel costs.",
   },
   {
-    text: "You typically book flights 3 weeks before departure. Booking 6 weeks early could save you up to 25%.",
+    text: "Based on your Melaka spending pattern, we recommend budgeting RM 500 for similar 3-day local trips.",
   },
 ];
 
@@ -115,7 +115,7 @@ export default function InformaticsDashboardPage() {
 
         {/* Donut Chart Section */}
         <UnifiedCard gradient className="p-6 mb-6">
-          <DonutChart percentage={65} label="Yearly Budget Used" total="RM 15,000" />
+          <DonutChart percentage={86} label="Yearly Budget Used" total="RM 3,100" />
         </UnifiedCard>
 
         {/* Metric Cards */}
@@ -158,18 +158,18 @@ export default function InformaticsDashboardPage() {
           </h2>
           <div className="space-y-3">
             <WatchlistCard
-              destination="London"
-              country="United Kingdom"
+              destination="Langkawi"
+              country="Malaysia"
               priceStatus="falling"
-              change={-8}
-              avgPrice="RM 3,200"
+              change={-12}
+              avgPrice="RM 1,800"
             />
             <WatchlistCard
-              destination="Tokyo"
-              country="Japan"
+              destination="Penang"
+              country="Malaysia"
               priceStatus="rising"
               change={5}
-              avgPrice="RM 4,500"
+              avgPrice="RM 1,200"
             />
           </div>
         </div>

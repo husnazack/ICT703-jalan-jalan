@@ -40,7 +40,7 @@ const dayDiffInclusive = (start?: string, end?: string) => {
 const TabBar = () => {
   const pathname = usePathname();
   const [data, setData] = React.useState<TripData | null>(null);
-  
+
   // Refs for tab elements
   const tabBarRef = React.useRef<HTMLDivElement>(null);
   const dashboardRef = React.useRef<HTMLAnchorElement>(null);
@@ -92,13 +92,13 @@ const TabBar = () => {
     active,
     label,
     icon,
-    innerRef, // Added innerRef prop
+    innerRef,
   }: {
     href: string;
     active: boolean;
     label: string;
     icon: React.ReactNode;
-    innerRef?: React.Ref<HTMLAnchorElement>; // Define innerRef type
+    innerRef?: React.Ref<HTMLAnchorElement>;
   }) => (
     <Link href={href} ref={innerRef} className="flex flex-col items-center group min-w-[90px] relative pt-6 pb-1.5">
       <span
@@ -121,7 +121,6 @@ const TabBar = () => {
         </span>
         {label}
       </span>
-      {/* Active indicator bar positioned on the border line */}
       {active && (
         <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#AD46FF] rounded-t-sm"></div>
       )}
@@ -129,7 +128,7 @@ const TabBar = () => {
   );
 
   return (
-    <div ref={tabBarRef} className="sticky top-0 z-10 bg-white border-b border-[#AD46FF]/30 relative"> {/* Added ref and relative positioning */}
+    <div ref={tabBarRef} className="sticky top-0 z-10 bg-white border-b border-[#AD46FF]/30 relative">
       <div className="container mx-auto px-5 sm:px-6 lg:px-12 xl:px-24 flex justify-between items-end">
         <nav className="flex items-end gap-14 relative">
           <TabLink
@@ -137,7 +136,7 @@ const TabBar = () => {
             active={isActive("dashboard")}
             label="Main"
             icon={<LayoutDashboard className="size-5" />}
-            innerRef={dashboardRef} // Pass ref
+            innerRef={dashboardRef}
           />
 
           <TabLink
@@ -145,7 +144,7 @@ const TabBar = () => {
             active={isActive("member")}
             label="Members"
             icon={<Users className="size-5" />}
-            innerRef={membersRef} // Pass ref
+            innerRef={membersRef}
           />
 
           <TabLink
@@ -153,11 +152,11 @@ const TabBar = () => {
             active={isActive("itenary")}
             label="Itinerary"
             icon={<MapPin className="size-5" />}
-            innerRef={itineraryRef} // Pass ref
+            innerRef={itineraryRef}
           />
         </nav>
 
-        {/* Compact, important trip summary (from JSON) */}
+        {/* Compact trip summary (from JSON) */}
         <div className="flex items-center gap-4 py-4">
           {/* Destination + dates */}
           <div className="hidden sm:flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">

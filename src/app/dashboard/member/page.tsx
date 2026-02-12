@@ -43,15 +43,15 @@ const renderCustomLabel = ({
   const radius = outerRadius + 35; // Increase distance from pie
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  
+
   // Determine text anchor based on position
   const textAnchor = x > cx ? 'start' : 'end';
-  
+
   // Split long names into multiple lines
   const words = name.split(' ');
   const lines: string[] = [];
   let currentLine = '';
-  
+
   words.forEach((word: string, idx: number) => {
     const testLine = currentLine ? `${currentLine} ${word}` : word;
     if (testLine.length > 15 && currentLine) {
@@ -60,12 +60,12 @@ const renderCustomLabel = ({
     } else {
       currentLine = testLine;
     }
-    
+
     if (idx === words.length - 1 && currentLine) {
       lines.push(currentLine);
     }
   });
-  
+
   // If only one line, display with percentage
   if (lines.length === 1) {
     return (
@@ -81,7 +81,7 @@ const renderCustomLabel = ({
       </text>
     );
   }
-  
+
   // Multiple lines - show name on multiple lines, percentage below
   return (
     <text
@@ -555,7 +555,7 @@ const avgPositionPct =
                   </div>
 
                   <div className="mt-1 text-sm text-slate-600">
-                    Seasons selected by the group 
+                    Seasons selected by the group
                   </div>
 
                   <div className="mt-4 h-[320px]" style={{ overflow: 'visible' }}>

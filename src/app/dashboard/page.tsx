@@ -31,7 +31,7 @@ import {
   ShieldAlert,
   Bell,
   Users2,
-  MapPin
+  MapPin,
 } from "lucide-react"
 
 const seasonLabels: Record<string, string> = {
@@ -67,7 +67,6 @@ const summaryIconGradients = [
   "bg-gradient-to-br from-pink-400 to-pink-600",
   "bg-gradient-to-br from-blue-400 to-blue-700",
 ];
-
 import { ConflictItem, SummaryStat, DashboardDestination } from "@/types"
 
 /* =======================
@@ -1274,7 +1273,5 @@ function MelakaPlaceGuideCard({
     </div>
   );
 }
-
-<br></br>
 
 export default DashboardPage;

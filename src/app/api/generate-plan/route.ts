@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
 
 // Get OpenAI API key from environment variable
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
@@ -355,42 +353,9 @@ export async function POST(request: NextRequest) {
       generatedPlan = getDefaultPlanData(data.trip_details.destination, days, data.travelers.length)
     }
 
-    // Prepare data
-    const groupId = data.group_id.replace(/[^a-zA-Z0-9_-]/g, '')
-    const timestamp = Math.floor(Date.now() / 1000)
-    const filename = `data-group-${groupId}-${timestamp}.json`
-
-    // Directory path
-    const saveDirectory = path.join(process.cwd(), 'public', 'data-travel-group-5')
-
-    // Create directory if it doesn't exist
-    if (!fs.existsSync(saveDirectory)) {
-      fs.mkdirSync(saveDirectory, { recursive: true })
-    }
-
-    // Prepare complete trip data
-    const tripData = {
-      group_id: data.group_id,
-      created_at: new Date().toISOString().replace('T', ' ').slice(0, 19),
-      timestamp: timestamp,
-      trip_details: {
-        destination: data.trip_details.destination,
-        start_date: data.trip_details.start_date,
-        end_date: data.trip_details.end_date
-      },
-      travelers: data.travelers,
-      generated_plan: generatedPlan
-    }
-
-    // Save file
-    const filePath = path.join(saveDirectory, filename)
-    fs.writeFileSync(filePath, JSON.stringify(tripData, null, 2), 'utf8')
-
     return NextResponse.json({
       success: true,
-      file: filename,
-      path: `public/data-travel-group-5/${filename}`,
-      message: 'Comprehensive travel plan generated and saved successfully',
+      message: 'Travel plan generated successfully',
       plan: generatedPlan
     })
 

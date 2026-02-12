@@ -17,6 +17,11 @@ import {
   ChevronDown,
   Bot,
   Compass,
+  Settings,
+  PieChart,
+  CalendarRange,
+  BarChart3,
+  BookOpen,
 } from "lucide-react";
 
 const navItems = [
@@ -31,7 +36,17 @@ const navItems = [
     ]
   },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/informatics/dashboard", label: "My Travel", icon: Wallet },
+  {
+    href: "/informatics/dashboard",
+    label: "My Travel",
+    icon: Wallet,
+    children: [
+      { href: "/informatics/dashboard", label: "Overview", icon: PieChart, description: "Travel pulse & spending" },
+      { href: "/informatics/planner", label: "Trip Tracker", icon: CalendarRange, description: "Log & track expenses" },
+      { href: "/informatics/insights", label: "Spending Insights", icon: BarChart3, description: "Review spending patterns" },
+      { href: "/informatics/reflection", label: "Reflection", icon: BookOpen, description: "Write trip reflections" },
+    ]
+  },
   { href: "/community", label: "Community", icon: Users },
 ];
 
@@ -39,7 +54,7 @@ export function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const dropdownRefs = React.useRef<Map<string, HTMLDivElement>>(new Map());
 
   const isItemActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -49,7 +64,9 @@ export function Navigation() {
   // Close dropdown when clicking outside
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (!openDropdown) return;
+      const activeRef = dropdownRefs.current.get(openDropdown);
+      if (activeRef && !activeRef.contains(event.target as Node)) {
         setOpenDropdown(null);
       }
     };
@@ -91,7 +108,10 @@ export function Navigation() {
                   <div
                     key={item.href}
                     className="relative"
-                    ref={dropdownRef}
+                    ref={(el) => {
+                      if (el) dropdownRefs.current.set(item.href, el);
+                      else dropdownRefs.current.delete(item.href);
+                    }}
                   >
                     <Button
                       variant={isActive || isDropdownOpen ? "secondary" : "ghost"}
@@ -161,6 +181,11 @@ export function Navigation() {
 
           {/* Right side actions */}
           <div className="flex items-center gap-2">
+            <Link href="/informatics/settings" className="hidden md:block">
+              <Button variant="ghost" size="icon" className="size-9">
+                <Settings className="size-4" />
+              </Button>
+            </Link>
             <Link href="/login" className="hidden md:block">
               <Button variant="ghost" size="sm">
                 Login
@@ -251,6 +276,12 @@ export function Navigation() {
 
               {/* Mobile auth links */}
               <div className="border-t mt-2 pt-2 flex flex-col gap-1">
+                <Link href="/informatics/settings" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start gap-3">
+                    <Settings className="size-4" />
+                    Settings
+                  </Button>
+                </Link>
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">Login</Button>
                 </Link>
